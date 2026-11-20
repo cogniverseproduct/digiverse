@@ -1,0 +1,119 @@
+{
+ "version": 1,
+ "rules": [
+  {
+   "sel": "title",
+   "text": "titleLine"
+  },
+  {
+   "sel": "header a.font-black",
+   "text": "shortName|name"
+  },
+  {
+   "sel": "header a.font-black",
+   "logo": "logo",
+   "height": 28
+  },
+  {
+   "sel": "header a.font-black",
+   "attr": "href",
+   "value": "\"#story\""
+  },
+  {
+   "sel": "header a[href='/donate/']",
+   "remove": true
+  },
+  {
+   "sel": "main > section:first-child img",
+   "image": "hero"
+  },
+  {
+   "sel": "main > section:first-child h1 > span:first-child",
+   "text": "tagline|name"
+  },
+  {
+   "sel": "main > section:first-child h1 > span:last-child",
+   "remove": true
+  },
+  {
+   "sel": "main > section:first-child p[style*='--i:2']",
+   "text": "mission|about",
+   "emptyRemove": true
+  },
+  {
+   "sel": "main > section:first-child p[style*='--i:3']",
+   "remove": true,
+   "ifEmpty": "firstProgram.title"
+  },
+  {
+   "sel": "#story section[id^='chapter']",
+   "repeat": "programs",
+   "max": 3,
+   "fields": {
+    "div.reveal > p:first-child": "category|\"Programme\"",
+    "h2": "title",
+    ".space-y-4 > p": "summary",
+    "img@image": "image"
+   }
+  },
+  {
+   "sel": "#story > section.bg-primary-800",
+   "repeat": "stats",
+   "offset": 0,
+   "max": 1,
+   "section": "#story > section.bg-primary-800",
+   "fields": {
+    "[data-count]": "value",
+    "p": "label"
+   }
+  },
+  {
+   "sel": "#story > div.border-y-2 > div",
+   "repeat": "stats",
+   "offset": 1,
+   "max": 3,
+   "section": "#story > div.border-y-2",
+   "fields": {
+    "b": "value",
+    "span": "label"
+   }
+  },
+  {
+   "sel": "[data-count]",
+   "all": true,
+   "attr": "data-count",
+   "value": "\"\""
+  },
+  {
+   "sel": "#story .riverline",
+   "remove": true,
+   "ifEmpty": "firstProgram.title"
+  },
+  {
+   "sel": "#give h2",
+   "text": "support.headline",
+   "emptyRemove": "#give"
+  },
+  {
+   "sel": "#give > div > div:first-child p",
+   "text": "support.text",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#give [data-give]",
+   "remove": true
+  },
+  {
+   "sel": "footer span:first-child",
+   "text": "© {year} {name}"
+  },
+  {
+   "sel": "footer span:last-child",
+   "text": "{email} · {phone}",
+   "emptyRemove": true
+  }
+ ],
+ "pruneEmpty": [
+  "#story figure"
+ ]
+}

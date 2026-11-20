@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aube — Botanical skincare, launching soon</title>
+  <meta name="description" content="Aube is a small-batch botanical skincare line made with cold-pressed oils and nothing you can't pronounce. Join the waitlist for early access and 20% off.">
+  <meta property="og:title" content="Aube — launching soon">
+  <meta property="og:description" content="Small-batch botanical skincare. Join the waitlist for early access.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/og-image.svg">
+  <meta name="theme-color" content="#0d1024">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Ccircle cx='17' cy='21' r='9' fill='none' stroke='%23e9c46a' stroke-width='2.4'/%3E%3Cpath d='M3 21h28M17 3v5M6.5 8.5l3.2 3.2M27.5 8.5l-3.2 3.2' stroke='%23e9c46a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ==========================================================================
+   Aube — coming soon page
+   Two colour variants: default (dusk) and <body class="variant-dawn">.
+   Theme tokens: override these to recolour the whole template.
+   ========================================================================== */
+:root {
+  --brand: #e9c46a;          /* gold */
+  --accent: #f4a3a8;         /* rose */
+  --accent-2: #7c8cf8;       /* periwinkle glow */
+  --bg: #0d1024;
+  --bg-2: #161a3a;
+  --surface: rgba(255, 255, 255, .06);
+  --border: rgba(255, 255, 255, .14);
+  --text: #f5efe6;
+  --muted: #b9b4c9;
+  --on-brand: #1a1530;
+  --radius: 18px;
+  --font-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.variant-dawn {
+  --brand: #b5536a;          /* deep rose */
+  --accent: #e8a87c;         /* apricot */
+  --accent-2: #f3c9d0;       /* blush glow */
+  --bg: #fbf4ec;
+  --bg-2: #f6e6da;
+  --surface: rgba(255, 255, 255, .6);
+  --border: rgba(90, 50, 40, .16);
+  --text: #2d1d1b;
+  --muted: #6e5752;
+  --on-brand: #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; min-height: 100dvh;
+  background: var(--bg); color: var(--text);
+  font: 400 16px/1.6 var(--font-body); -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column; overflow-x: hidden;
+}
+a { color: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 6px; }
+.skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--brand); color: var(--on-brand); padding: 10px 16px; border-radius: 10px; font-weight: 700; text-decoration: none; }
+.skip-link:focus { top: 16px; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Animated background */
+.bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: radial-gradient(120% 90% at 50% 110%, var(--bg-2), var(--bg) 60%); }
+.orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; will-change: transform; }
+.orb.o1 { width: 46vmax; height: 46vmax; left: -12vmax; top: -14vmax; background: var(--accent-2); animation: drift1 26s ease-in-out infinite alternate; }
+.orb.o2 { width: 38vmax; height: 38vmax; right: -12vmax; top: 18vh; background: var(--accent); opacity: .38; animation: drift2 32s ease-in-out infinite alternate; }
+.orb.o3 { width: 30vmax; height: 30vmax; left: 30vw; bottom: -18vmax; background: var(--brand); opacity: .3; animation: drift3 22s ease-in-out infinite alternate; }
+.variant-dawn .orb { opacity: .5; }
+@keyframes drift1 { to { transform: translate(14vw, 10vh) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-16vw, -8vh) scale(.9); } }
+@keyframes drift3 { to { transform: translate(-10vw, -12vh) scale(1.2); } }
+.stars { position: absolute; inset: 0; opacity: .8; animation: twinkle 6s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, #fff, transparent), radial-gradient(1px 1px at 28% 72%, #fff, transparent),
+    radial-gradient(1.4px 1.4px at 44% 30%, #fff, transparent), radial-gradient(1px 1px at 63% 14%, #fff, transparent),
+    radial-gradient(1.2px 1.2px at 78% 58%, #fff, transparent), radial-gradient(1px 1px at 88% 26%, #fff, transparent),
+    radial-gradient(1.3px 1.3px at 8% 84%, #fff, transparent), radial-gradient(1px 1px at 52% 88%, #fff, transparent),
+    radial-gradient(1px 1px at 94% 80%, #fff, transparent), radial-gradient(1.2px 1.2px at 36% 50%, #fff, transparent); }
+.variant-dawn .stars { display: none; }
+@keyframes twinkle { to { opacity: .35; } }
+.grain { position: absolute; inset: -50%; opacity: .07; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.variant-dawn .grain { opacity: .1; }
+
+/* Botanical line art */
+.botanical { position: fixed; z-index: -1; color: var(--brand); opacity: .35; pointer-events: none; width: min(32vw, 360px); height: auto; }
+.botanical.left { left: -30px; bottom: -20px; }
+.botanical.right { right: -40px; top: 60px; transform: scaleX(-1) rotate(12deg); width: min(24vw, 260px); }
+.botanical path { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: grow 5s 0.3s ease forwards; }
+@keyframes grow { to { stroke-dashoffset: 0; } }
+@media (max-width: 700px) { .botanical { opacity: .2; width: 48vw; } .botanical.right { display: none; } }
+
+/* Layout */
+.top { display: flex; justify-content: space-between; align-items: center; padding: 28px clamp(20px, 5vw, 56px); }
+.logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font: 600 1.7rem/1 var(--font-display); letter-spacing: .02em; }
+.logo svg { width: 34px; height: 34px; color: var(--brand); }
+.top .contact { font-size: .9rem; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+.top .contact:hover { color: var(--text); border-color: var(--brand); }
+main { flex: 1; display: grid; place-items: center; padding: 20px clamp(20px, 5vw, 56px) 40px; }
+.stage { width: 100%; max-width: 760px; text-align: center; }
+.eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: .78rem; letter-spacing: .32em; text-transform: uppercase; color: var(--brand); margin-bottom: 22px; }
+.eyebrow::before, .eyebrow::after { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
+h1 { font: 500 clamp(2.9rem, 8.5vw, 6.2rem)/.98 var(--font-display); letter-spacing: -.02em; margin: 0 0 22px; }
+h1 em { font-style: italic; color: var(--brand); }
+.lead { color: var(--muted); font-size: clamp(1.02rem, 1.6vw, 1.15rem); max-width: 540px; margin: 0 auto 40px; }
+
+/* Countdown */
+.countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 2vw, 18px); max-width: 600px; margin: 0 auto 14px; list-style: none; padding: 0; }
+.countdown li { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: clamp(14px, 3vw, 24px) 6px clamp(12px, 2.4vw, 18px); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: relative; overflow: hidden; }
+.countdown li::after { content: ""; position: absolute; left: 20%; right: 20%; bottom: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--brand), transparent); opacity: .7; }
+.countdown b { display: block; font: 500 clamp(2.2rem, 7vw, 4rem)/1 var(--font-display); font-variant-numeric: tabular-nums lining-nums; }
+.countdown span { font-size: clamp(.64rem, 1.8vw, .75rem); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.launch-date { font-size: .9rem; color: var(--muted); margin: 0 0 40px; }
+.launch-date strong { color: var(--text); font-weight: 600; }
+.countdown b.tick { animation: tick .5s ease; }
+@keyframes tick { from { transform: translateY(-20%); opacity: .3; } }
+
+/* Signup */
+.signup { display: flex; gap: 8px; max-width: 480px; margin: 0 auto; padding: 6px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: border-color .2s, box-shadow .2s; }
+.signup:focus-within { border-color: var(--brand); box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 22%, transparent); }
+.signup input { flex: 1; min-width: 0; background: transparent; border: 0; padding: 12px 18px; color: var(--text); font: inherit; }
+.signup input::placeholder { color: var(--muted); }
+.signup input:focus { outline: none; }
+.signup button { border: 0; border-radius: 999px; padding: 12px 24px; background: var(--brand); color: var(--on-brand); font: 700 .95rem var(--font-body); cursor: pointer; transition: transform .2s, filter .2s; white-space: nowrap; }
+.signup button:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.signup--link { max-width: 340px; }
+.signup a.signup-cta { flex: 1; text-align: center; text-decoration: none; border-radius: 999px; padding: 12px 24px; background: var(--brand); color: var(--on-brand); font: 700 .95rem var(--font-body); transition: transform .2s, filter .2s; white-space: nowrap; }
+.signup a.signup-cta:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.form-msg { min-height: 1.6em; margin: 14px 0 0; font-size: .92rem; color: var(--brand); }
+.privacy { font-size: .8rem; color: var(--muted); margin: 4px 0 0; }
+@media (max-width: 480px) {
+  .signup { flex-direction: column; border-radius: 22px; padding: 8px; }
+  .signup input { text-align: center; }
+}
+
+/* Footer */
+.bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 22px clamp(20px, 5vw, 56px) 30px; font-size: .85rem; color: var(--muted); }
+.socials { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; }
+.socials a { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--border); background: var(--surface); color: var(--text); transition: background .25s, color .25s, transform .25s; }
+.socials a:hover { background: var(--brand); color: var(--on-brand); transform: translateY(-2px); }
+.socials svg { width: 17px; height: 17px; }
+@media (max-width: 560px) { .bottom { justify-content: center; text-align: center; flex-direction: column-reverse; } }
+
+/* Variant switch (demo only, remove in production) */
+.variant-link { font-size: .85rem; color: var(--muted); }
+
+/* Entrance */
+.fade { animation: fadeUp 1s cubic-bezier(.2,.7,.2,1) both; }
+.fade.d1 { animation-delay: .1s; } .fade.d2 { animation-delay: .2s; } .fade.d3 { animation-delay: .3s; } .fade.d4 { animation-delay: .4s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .botanical path { stroke-dashoffset: 0; }
+}
+main { padding-top: 0; padding-bottom: 24px; }
+.lead { margin-bottom: 32px; }
+.launch-date { margin-bottom: 30px; }
+.top { padding-top: 22px; padding-bottom: 18px; }
+
+</style>
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="bg" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="stars"></div><div class="grain"></div></div>
+  <svg class="botanical left" viewBox="0 0 360 520" aria-hidden="true"><path d="M60 520C80 400 120 300 200 200S330 60 340 10"/><path d="M150 290c-40-10-80-40-96-86 46 4 86 34 96 86Z"/><path d="M178 244c10-44 40-80 88-92-6 46-40 80-88 92Z"/><path d="M112 370c-44 0-86-22-110-62 46-6 90 18 110 62Z"/><path d="M232 170c-34-24-54-64-50-110 40 20 58 62 50 110Z"/><path d="M270 128c24-34 64-52 104-46-18 40-60 56-104 46Z"/><path d="M96 430c34-24 78-30 116-10-34 26-78 30-116 10Z"/><path d="M300 80c-4-22 4-44 22-56 6 22-2 44-22 56Z"/></svg>
+  <svg class="botanical right" viewBox="0 0 360 520" aria-hidden="true"><path d="M60 520C80 400 120 300 200 200S330 60 340 10"/><path d="M150 290c-40-10-80-40-96-86 46 4 86 34 96 86Z"/><path d="M178 244c10-44 40-80 88-92-6 46-40 80-88 92Z"/><path d="M112 370c-44 0-86-22-110-62 46-6 90 18 110 62Z"/><path d="M232 170c-34-24-54-64-50-110 40 20 58 62 50 110Z"/><path d="M270 128c24-34 64-52 104-46-18 40-60 56-104 46Z"/><path d="M96 430c34-24 78-30 116-10-34 26-78 30-116 10Z"/><path d="M300 80c-4-22 4-44 22-56 6 22-2 44-22 56Z"/></svg>
+
+  <header class="top">
+    <a class="logo" href="index.html" aria-label="Aube home"><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="21" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 21h28M17 3v5M6.5 8.5l3.2 3.2M27.5 8.5l-3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span data-zt="brandName">Aube</span></a>
+    <a class="contact" href="mailto:hello@aube.example">hello@aube.example</a>
+  </header>
+
+  <main id="main">
+    <div class="stage">
+      <p class="eyebrow fade">Launching this winter</p>
+      <h1 class="fade d1" data-zt="heading">Something <em>beautiful</em> is blooming.</h1>
+      <p class="lead fade d2">Aube is small-batch botanical skincare made with cold-pressed oils and nothing you can't pronounce. We're putting the final touches on our first collection.</p>
+
+      <section class="fade d3" aria-label="Countdown to launch">
+        <ol class="countdown" id="countdown" data-date="2026-12-01T09:00:00" role="timer" aria-live="off">
+          <li><b data-unit="days">67</b><span>Days</span></li>
+          <li><b data-unit="hours">00</b><span>Hours</span></li>
+          <li><b data-unit="minutes">00</b><span>Minutes</span></li>
+          <li><b data-unit="seconds">00</b><span>Seconds</span></li>
+        </ol>
+        <p class="launch-date">Doors open <strong id="launch-date">1 December 2026, 9:00</strong></p>
+      </section>
+
+      <div class="fade d4">
+        <!-- Wire this form: set action to your Formspree endpoint (https://formspree.io/f/xxxx),
+             or add name="waitlist" data-netlify="true" on Netlify, then remove data-demo-form.
+             Mailchimp/ConvertKit/Buttondown embed URLs work too. -->
+        <div class="signup signup--link"><a class="signup-cta" href="mailto:hello@aube.example">Find out more</a></div>
+        <p class="privacy">Early access + 20% off launch day.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bottom">
+    <span>&copy; <span data-year>2026</span> <span data-zt="brandName">Aube</span> Botanicals · <a class="variant-link" href="dawn.html">Dawn version</a></span>
+    <ul class="socials">
+      <li><a href="#main" aria-label="Aube on Instagram"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/></svg></a></li>
+      <li><a href="#main" aria-label="Aube on Pinterest"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M10.5 20l2-8.5M11 14.5c.6.9 1.5 1.3 2.5 1.3 2.3 0 3.8-2.2 3.8-4.6A5 5 0 0 0 12 6.5 5.2 5.2 0 0 0 6.7 11.6c0 1 .4 2 1.2 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a></li>
+      <li><a href="#main" aria-label="Aube on TikTok"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.5 2.5 4.5 5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a></li>
+      <li><a href="mailto:hello@aube.example" aria-label="Email Aube"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+    </ul>
+  </footer>
+<script>
+/* ==========================================================================
+   Aube — coming soon page
+   ------------------------------------------------------------------------
+   CONFIGURE YOUR LAUNCH HERE
+   LAUNCH_DATE: ISO date-time. Add a timezone offset (e.g. "+01:00") to pin
+   it to a specific zone; without one it uses the visitor's local time.
+   ========================================================================== */
+/* DigiVerse: the date comes from the page (data-date on #countdown); the upstream default stays as the fallback for the original preview. */
+var LAUNCH_DATE = (function () { var c = document.getElementById("countdown"); return c ? (c.getAttribute("data-date") || "") : ""; })();
+var LAUNCHED_MESSAGE = "We're live! Come on in.";
+
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+    // Countdown
+    var target = new Date(LAUNCH_DATE);
+    var dateEl = document.getElementById("launch-date");
+    if (dateEl && !isNaN(target)) {
+      dateEl.textContent = target.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" }) +
+        /* DigiVerse: a start at exactly 00:00 means no time was given, so none is shown. */
+        ((target.getHours() || target.getMinutes()) ? ", " + target.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }) : "");
+    }
+    var units = {};
+    document.querySelectorAll("[data-unit]").forEach(function (el) { units[el.dataset.unit] = el; });
+    var pad = function (n) { return n < 10 ? "0" + n : String(n); };
+    var set = function (key, value) {
+      var el = units[key];
+      if (!el || el.textContent === value) return;
+      el.textContent = value;
+      if (!reduce) { el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick"); }
+    };
+    var timer;
+    var update = function () {
+      var diff = target - new Date();
+      if (isNaN(diff)) return;
+      if (diff <= 0) {
+        clearInterval(timer);
+        ["days", "hours", "minutes", "seconds"].forEach(function (k) { set(k, "00"); });
+        var note = document.querySelector(".launch-date");
+        if (note) note.textContent = LAUNCHED_MESSAGE;
+        return;
+      }
+      var s = Math.floor(diff / 1000);
+      set("days", pad(Math.floor(s / 86400)));
+      set("hours", pad(Math.floor((s % 86400) / 3600)));
+      set("minutes", pad(Math.floor((s % 3600) / 60)));
+      set("seconds", pad(s % 60));
+    };
+    update();
+    timer = setInterval(update, 1000);
+
+    // Waitlist form (demo) — see the comment above the form in index.html to connect it
+    document.querySelectorAll("form[data-demo-form]").forEach(function (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var input = form.querySelector("input[type=email]");
+        var msg = form.parentElement.querySelector(".form-msg");
+        if (!input.checkValidity()) {
+          msg.textContent = "Please enter a valid email address.";
+          input.setAttribute("aria-invalid", "true");
+          input.focus();
+          return;
+        }
+        input.removeAttribute("aria-invalid");
+        msg.textContent = "You're on the list! (Demo form: connect it to Formspree, Netlify Forms or your newsletter tool.)";
+        form.reset();
+      });
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "brandVars": { "--color-7": "accent" },
+  "pruneIfNoLinks": ["#site-nav > nav", ".ft__nav", ".op__actions", ".ft__social"],
+  "rules": [
+    { "sel": "title", "text": "titleLine" },
+    { "sel": "meta[name=\"description\"]", "attr": "content", "value": "description|tagline", "emptyRemove": true },
+    { "sel": "meta[property^=\"og:\"]", "all": true, "remove": true },
+    { "sel": "meta[name=\"twitter:card\"]", "remove": true },
+
+    { "sel": ".nav__logo", "text": "shortName|name" },
+    { "sel": ".nav__cta", "attr": "href", "value": "bookingUrl|\"#passes\"" },
+    { "sel": "#nav-list a[href=\"#strands\"], .ft__nav a[href=\"#strands\"]", "all": true, "literal": "Tracks" },
+    { "sel": "#nav-list a[href=\"#jury\"]", "literal": "Speakers" },
+
+    { "sel": ".op__title", "lenVar": "--len", "of": "name" },
+    { "sel": ".op-cut__in", "text": "{nameFirst} {nameMid}", "emptyRemove": ".op-cut" },
+    { "sel": ".op-window__word", "text": "nameLast" },
+    { "sel": ".op-window__film", "image": "hero|gallery.0.url" },
+    { "sel": ".op__where > span:first-child", "text": "city", "emptyRemove": true },
+    { "sel": ".op__where > span:last-child", "text": "dateRange", "emptyRemove": true },
+    { "sel": ".op__strands > li", "repeat": "tracks", "min": 1, "max": 6, "section": ".op__strands", "fields": { ":scope": "name" } },
+    { "sel": ".op__intro > p.m-text-2", "text": "tagline", "emptyRemove": true },
+    { "sel": ".op__intro > p.m-text", "remove": true },
+    { "sel": ".op__actions a.m-btn", "attr": "href", "value": "bookingUrl|\"#passes\"" },
+    { "sel": ".op__edition", "text": "[{edition}]", "emptyRemove": true },
+    { "sel": ".op__second", "remove": true, "ifEmpty": "hero|gallery.0.url" },
+    { "sel": ".op__film", "image": "hero|gallery.0.url" },
+    { "sel": ".op__statement", "remove": true },
+    { "sel": ".op__card", "remove": true },
+
+    { "sel": "#manifesto", "remove": true, "ifEmpty": "description" },
+    { "sel": ".mf__note", "text": "[{dateRange|cityLine|shortName|name}]" },
+    { "sel": ".mf__statement", "text": "description" },
+    { "sel": ".mf__aside", "remove": true },
+
+    { "sel": "#selection", "remove": true, "ifEmpty": "days.0.slots.0.time" },
+    { "sel": ".sel__title", "literal": "The programme" },
+    { "sel": ".sel__title", "lenVar": "--len", "of": "\"The programme\"" },
+    { "sel": ".sel__headnote", "remove": true },
+    { "sel": ".sel__list > li.sel__row", "repeat": "days.0.slots", "min": 1, "grow": true, "max": 8, "section": "#selection",
+      "fields": {
+        ".sel__meta-top h3": "sessions.0.title",
+        ".sel__runtime": "time",
+        ".sel__by": "sessions.0.who",
+        ".sel__logline": "sessions.0.description",
+        ".sel__when": "[{$.days.0.dateText} · {time} · {sessions.0.place}]"
+      },
+      "nested": [ { "sel": ".sel__frame", "remove": true } ] },
+
+    { "sel": "#strands", "remove": true, "ifEmpty": "tracks.0.name" },
+    { "sel": ".st__title", "literal": "Tracks" },
+    { "sel": ".st__lead", "remove": true },
+    { "sel": ".st__note", "remove": true },
+    { "sel": ".st__list > li.st__item", "repeat": "tracks", "min": 1, "grow": true, "max": 8, "section": "#strands",
+      "fields": { ".st__name": "name", ".st__days": "{description}" } },
+
+    { "sel": "#premiere", "remove": true },
+
+    { "sel": "#jury", "remove": true, "ifEmpty": "speakers.0.name" },
+    { "sel": ".jr__title", "literal": "Speakers" },
+    { "sel": ".jr__title", "lenVar": "--len", "of": "\"Speakers\"" },
+    { "sel": ".jr__lead", "remove": true },
+    { "sel": ".jr__grid > li.jr__card", "repeat": "speakers", "min": 1, "grow": true, "max": 8, "section": "#jury",
+      "fields": { ".m-text-6": "name", ".jr__role": "role", ".jr__quote": "“{topic}”" },
+      "nested": [
+        { "sel": ".jr__photo", "remove": true, "ifEmpty": "photo" },
+        { "sel": ".jr__photo img", "image": "photo" }
+      ] },
+
+    { "sel": "#submit", "remove": true },
+    { "sel": "#venues", "remove": true },
+
+    { "sel": "#faq", "remove": true, "ifEmpty": "faqs.0.question" },
+    { "sel": ".fq__list > details", "repeat": "faqs", "min": 1, "grow": true, "max": 8, "section": "#faq",
+      "fields": { "summary .m-text-6": "question", ".fq__a": "answer" } },
+
+    { "sel": "#passes", "remove": true, "ifEmpty": "tickets.0.name" },
+    { "sel": ".ps__lead", "remove": true },
+    { "sel": ".ps__switch", "remove": true },
+    { "sel": ".ps__list > li.ps__ticket", "repeat": "tickets", "min": 1, "grow": true, "max": 4, "section": "#passes",
+      "fields": { ".ps__body h3": "name", ".ps__span": "[{badge}]", "[data-tier=\"standard\"]": "price" },
+      "nested": [
+        { "sel": "[data-tier=\"concession\"]", "remove": true },
+        { "sel": ".ps__incl > li", "repeat": "features", "min": 1, "grow": true, "section": ".ps__incl", "fields": { ":scope": "value" } },
+        { "sel": ".m-btn__label", "literal": "Get this pass" },
+        { "sel": "a.m-btn", "attr": "href", "value": "url", "emptyRemove": true }
+      ] },
+
+    { "sel": ".ct__line", "remove": true },
+    { "sel": ".ct__list > div:nth-child(1) dt", "literal": "Email" },
+    { "sel": ".ct__list > div:nth-child(1)", "remove": true, "ifEmpty": "email" },
+    { "sel": ".ct__list > div:nth-child(1) a", "attr": "href", "value": "mailto", "emptyRemove": true },
+    { "sel": ".ct__list > div:nth-child(1) a", "text": "email" },
+    { "sel": ".ct__list > div:nth-child(2)", "remove": true },
+    { "sel": ".ct__list > div:nth-child(3)", "remove": true },
+    { "sel": ".ct__list > div:nth-child(4)", "remove": true, "ifEmpty": "venueName|venueAddress|cityLine|tel" },
+    { "sel": ".ct__list > div:nth-child(4) dt", "literal": "Find us" },
+    { "sel": ".ct__list > div:nth-child(4) dd", "text": "venueFull|\" \"", "textNode": "first" },
+    { "sel": ".ct__list > div:nth-child(4) a", "attr": "href", "value": "tel", "emptyRemove": true },
+    { "sel": ".ct__list > div:nth-child(4) a", "text": "phone" },
+
+    { "sel": ".ft__mark", "text": "shortName|name" },
+    { "sel": ".ft__mark", "lenVar": "--len", "of": "shortName|name" },
+    { "sel": ".ft__line", "literal": "See you there." },
+    { "sel": ".ft__mail", "attr": "href", "value": "mailto", "emptyRemove": true },
+    { "sel": ".ft__mail", "text": "email", "emptyRemove": true },
+    { "sel": ".ft__social > li", "repeat": "social", "min": 1, "grow": true, "proto": ".ft__social > li:nth-child(1)",
+      "fields": { "a@href": "url", "a": "label" } },
+    { "sel": ".ft__bottom > p", "text": "© {year} {shortName|name} · Design:", "textNode": "first", "trailingSpace": true }
+  ]
+}

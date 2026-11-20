@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "brandVars": { "--brand": "primary", "--accent": "accent" },
+  "keepImages": [".corner", ".divider"],
+  "pruneEmpty": [".hero .kicker", ".gallery", ".footer .hashtag", ".welcome .arch"],
+  "pruneIfNoLinks": [".nav-links"],
+  "rules": [
+    { "sel": "title", "text": "titleLine" },
+
+    { "sel": ".monogram", "text": "wedding.initials|shortName" },
+    { "sel": ".nav-links a.btn", "attr": "href", "value": "mailto", "emptyRemove": "li" },
+
+    { "sel": ".hero .kicker", "text": "tagline", "emptyRemove": true },
+    { "sel": "h1", "text": "wedding.partnerOne|name", "textNode": "first" },
+    { "sel": "h1", "text": "wedding.partnerTwo|\" \"", "textNode": true },
+    { "sel": "h1 .amp", "remove": true, "ifEmpty": "wedding.partnerTwo" },
+    { "sel": ".hero-date", "text": "longDate", "emptyRemove": true },
+    { "sel": ".hero-place", "text": "venueLine", "emptyRemove": true },
+    { "sel": ".countdown", "attr": "data-date", "value": "startsAtIso", "emptyRemove": true },
+    { "sel": ".hero-cta .btn:not(.btn-outline)", "attr": "href", "value": "mailto", "emptyRemove": true },
+
+    { "sel": ".welcome .arch img", "image": "hero|gallery.0.url", "emptyRemove": ".arch" },
+    { "sel": ".welcome .lead", "text": "description|tagline", "emptyRemove": true },
+    { "sel": ".welcome .muted", "remove": true },
+    { "sel": ".welcome .sign", "text": "wedding.coupleNames|name", "emptyRemove": true },
+
+    { "sel": "section[aria-labelledby=\"story-title\"] .timeline > li.tl-item", "repeat": "wedding.milestones", "min": 1, "section": "section[aria-labelledby=\"story-title\"]", "grow": true, "proto": ".timeline > li.tl-item",
+      "fields": { ".tl-year": "date", "h3": "title", ".tl-card > p:last-child": "text" },
+      "nested": [{ "sel": ".when", "remove": true }] },
+
+    { "sel": "#schedule .events > article.event", "repeat": "wedding.itinerary", "min": 1, "section": "#schedule", "grow": true, "proto": "#schedule .events > article.event",
+      "fields": { ".time": "time", "h3": "name", ".where": "venue", "p:not(.time):not(.where)": "description" } },
+    { "sel": "#schedule .dress", "remove": true, "ifEmpty": "wedding.dress" },
+    { "sel": "#schedule .dress", "text": "wedding.dress", "textNode": true, "leadingSpace": true },
+    { "sel": "#schedule .swatches", "remove": true },
+
+    { "sel": "#travel", "remove": true, "ifEmpty": "venueName|venueAddress|airport|transit|wedding.hotels.0.name" },
+    { "sel": "#travel .map", "remove": true },
+    { "sel": "#travel .venue-card h3", "text": "venueName", "emptyRemove": true },
+    { "sel": "#travel address", "text": "{venueAddress}, {cityLine}", "emptyRemove": true },
+    { "sel": "#travel .venue-card .body .btn", "remove": true },
+    { "sel": "#travel .travel-item:nth-child(1) p", "text": "airport", "emptyRemove": ".travel-item" },
+    { "sel": "#travel .travel-item:nth-child(2) h3", "literal": "Getting around" },
+    { "sel": "#travel .travel-item:nth-child(2) p", "text": "transit|parking", "emptyRemove": ".travel-item" },
+    { "sel": "#travel .travel-item:nth-child(3)", "remove": true, "ifEmpty": "wedding.hotels.0.name" },
+    { "sel": "#travel .travel-item:nth-child(3) > div > p", "remove": true },
+    { "sel": "#travel .hotels > li", "repeat": "wedding.hotels", "min": 1, "section": "#travel .travel-item:nth-child(3)", "proto": "#travel .hotels > li",
+      "fields": { "span:first-child": "line", "span:last-child": "note" } },
+
+    { "sel": "section[aria-labelledby=\"gallery-title\"]", "remove": true, "ifEmpty": "gallery.0.url" },
+    { "sel": ".gallery > figure", "repeat": "gallery", "min": 1, "grow": true, "max": 8, "section": "section[aria-labelledby=\"gallery-title\"]", "proto": ".gallery > figure:nth-child(2)",
+      "fields": { "img@image": "url", "img@alt": "{caption}", "figcaption": "caption" } },
+    { "sel": ".gallery-note", "remove": true },
+
+    { "sel": "#rsvp", "remove": true },
+
+    { "sel": "#registry", "remove": true, "ifEmpty": "wedding.registry.0.url" },
+    { "sel": ".registry > a.reg", "repeat": "wedding.registry", "min": 1, "grow": true, "section": "#registry", "proto": ".registry > a.reg:nth-child(1)",
+      "fields": { "@href": "url", "h3": "name" },
+      "nested": [{ "sel": "p", "remove": true }, { "sel": "span", "literal": "View →" }] },
+    { "sel": "#registry .head .muted", "remove": true },
+
+    { "sel": "#faq", "remove": true, "ifEmpty": "faqs.0.question" },
+    { "sel": ".faq > details", "repeat": "faqs", "min": 1, "grow": true, "section": "#faq", "proto": ".faq > details:nth-child(1)", "fields": { "summary": "question", "p": "answer" } },
+
+    { "sel": ".site-footer .names", "text": "wedding.coupleNames|name" },
+    { "sel": ".site-footer .date", "text": "{longDate} · {cityLine}", "emptyRemove": true },
+    { "sel": ".site-footer .hashtag", "remove": true },
+    { "sel": ".site-footer small a", "attr": "href", "value": "mailto", "emptyRemove": true },
+    { "sel": ".site-footer small a", "text": "email" }
+  ]
+}

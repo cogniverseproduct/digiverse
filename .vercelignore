@@ -1,0 +1,14 @@
+# Never upload local data, secrets or build artefacts to Vercel.
+# Vercel installs dependencies and builds from source itself.
+node_modules
+client/node_modules
+server/node_modules
+client/dist
+server/dist
+server/data
+server/.env
+**/.env
+**/.env.*
+!**/.env.example
+scratch
+*.tsbuildinfo

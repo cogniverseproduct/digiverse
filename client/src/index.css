@@ -1,0 +1,593 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FDFBF7;
+    color: #1C1917;
+    overflow-x: hidden;
+  }
+}
+
+/* Living Festival Canvas Pattern & Texture Utilities */
+.bg-alpana-pattern {
+  background-color: #FDFBF7;
+  background-image: 
+    radial-gradient(rgba(217, 119, 6, 0.08) 1.2px, transparent 1.2px), 
+    radial-gradient(rgba(185, 28, 28, 0.06) 1.2px, #FDFBF7 1.2px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
+
+.bg-warm-parchment {
+  background-color: #FAF6EE;
+  background-image: radial-gradient(rgba(180, 83, 9, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-festival-canvas {
+  background-color: #FCF9F2;
+  background-image: linear-gradient(135deg, rgba(220, 38, 38, 0.02) 0%, rgba(217, 119, 6, 0.03) 50%, rgba(253, 251, 247, 0.8) 100%);
+}
+
+.bg-deep-festive {
+  background: radial-gradient(circle at top center, #1E1218 0%, #140A0F 60%, #0D070B 100%);
+}
+
+/* Realistic Laptop Device Mockup Styling */
+.laptop-mockup-frame {
+  box-shadow: 
+    0 25px 60px -15px rgba(28, 25, 23, 0.35),
+    0 12px 24px -8px rgba(185, 28, 28, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.laptop-base-shadow {
+  box-shadow: 
+    0 20px 35px -5px rgba(28, 25, 23, 0.45),
+    0 0 40px rgba(217, 119, 6, 0.1);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #FDFBF7;
+}
+::-webkit-scrollbar-thumb {
+  background: #D7CEBE;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B8AC98;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* =====================================================================
+   DigiVerse Main Product — "Prism Paper" light design system
+   Everything below is scoped to .dv-app so website-generation engines,
+   generated customer websites and portfolio templates are unaffected.
+   ===================================================================== */
+
+.dv-app {
+  --dv-canvas: #F6F5FA;
+  --dv-ink: #12122A;
+  --dv-iris: #6750F2;
+  --dv-coral: #FF6B4A;
+  --dv-aqua: #12B5A6;
+  --dv-prism: linear-gradient(115deg, #5640DE 0%, #8B5CF6 45%, #FF6B4A 100%);
+  background-color: var(--dv-canvas);
+  color: var(--dv-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(.dv-app) ::selection {
+  background: rgba(103, 80, 242, 0.18);
+  color: #12122A;
+}
+
+/* Visible, consistent keyboard focus across the main product */
+.dv-app :focus-visible {
+  outline: 2px solid rgba(103, 80, 242, 0.7);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Headings in the main product use the display face */
+:where(.dv-app) :where(h1, h2, h3):not(:where(.dv-engine-stage *)) {
+  font-family: "Bricolage Grotesque", Inter, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Signature gradient text + fills */
+.dv-prism-text {
+  background: linear-gradient(115deg, #5640DE 0%, #8B5CF6 45%, #FF6B4A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dv-prism-fill {
+  background: linear-gradient(115deg, #5640DE 0%, #7C4DEB 50%, #A855F7 100%);
+}
+
+/* Paper grain — a tiny inline SVG noise, adds tactility to flat light surfaces */
+.dv-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.16 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Fine dotted canvas used behind hero/feature sections */
+.dv-dots {
+  background-image: radial-gradient(rgba(18, 18, 42, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.dv-grid-lines {
+  background-image:
+    linear-gradient(rgba(18, 18, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 18, 42, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Glass surfaces */
+.dv-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+}
+
+/* Scroll-reveal (driven by useReveal / <Reveal>) */
+.dv-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--dv-delay, 0ms);
+}
+.dv-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hover lift for interactive cards */
+.dv-lift {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.dv-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 6px rgba(18, 18, 42, 0.05), 0 28px 56px -24px rgba(71, 50, 184, 0.28);
+}
+
+/* Primary button sheen */
+.dv-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.dv-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dv-sheen:hover::before {
+  transform: translateX(120%);
+}
+
+/* Main-product scrollbars */
+.dv-app ::-webkit-scrollbar { width: 9px; height: 9px; }
+.dv-app ::-webkit-scrollbar-track { background: transparent; }
+.dv-app ::-webkit-scrollbar-thumb {
+  background: #D9D6E8;
+  border-radius: 999px;
+  border: 2px solid #F6F5FA;
+}
+.dv-app ::-webkit-scrollbar-thumb:hover { background: #BDB8D6; }
+.dv-app .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.dv-app .custom-scrollbar::-webkit-scrollbar-thumb { background: #D9D6E8; border: 0; }
+
+/* Engine workspaces (type selection and requirement wizards) now use the light system too. */
+
+/* =====================================================================
+   Colour-rich light canvas (multi-colour mesh) — lavender, sky, aqua, coral
+   ===================================================================== */
+.dv-app {
+  background-color: #F1EEFB;
+  background-image:
+    radial-gradient(1100px 720px at 6% -6%, rgba(172, 155, 255, 0.55), transparent 62%),
+    radial-gradient(900px 620px at 102% 2%, rgba(255, 190, 165, 0.48), transparent 58%),
+    radial-gradient(1000px 700px at 88% 104%, rgba(140, 222, 236, 0.5), transparent 62%),
+    radial-gradient(820px 600px at -4% 100%, rgba(255, 186, 224, 0.38), transparent 58%);
+  background-attachment: fixed;
+}
+
+/* Cards become soft tinted glass instead of flat white; tint rotates so they are not all identical */
+.dv-app .bg-white.shadow-dv-card {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 241, 255, 0.86) 100%);
+  border-color: rgba(120, 100, 230, 0.14);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+.dv-app .bg-white.shadow-dv-card:nth-child(3n + 2) {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 246, 255, 0.88) 100%);
+  border-color: rgba(60, 160, 220, 0.16);
+}
+.dv-app .bg-white.shadow-dv-card:nth-child(3n) {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 238, 232, 0.88) 100%);
+  border-color: rgba(255, 120, 90, 0.16);
+}
+.dv-app .bg-white.shadow-dv-card:nth-child(4n) {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(228, 248, 244, 0.88) 100%);
+  border-color: rgba(30, 180, 160, 0.16);
+}
+
+/* Animated multi-colour gradient border (conic, GPU-cheap) */
+@property --dv-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes dv-spin-angle { to { --dv-angle: 360deg; } }
+.dv-border-glow { position: relative; }
+.dv-border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: conic-gradient(from var(--dv-angle), #8B5CF6, #22D3EE, #FF8A6B, #F0ABFC, #8B5CF6);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.85;
+  animation: dv-spin-angle 9s linear infinite;
+}
+
+@keyframes dv-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Auto-sliding card rows (content is rendered twice; keyframe moves by 50%) */
+.dv-marquee-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.dv-marquee-track {
+  display: flex;
+  width: max-content;
+  padding: 0.75rem 0 1.25rem 0.625rem;
+  animation: dv-marquee var(--dv-speed, 55s) linear infinite;
+  will-change: transform;
+}
+.dv-marquee-track.is-reverse { animation-direction: reverse; }
+.dv-marquee-wrap:hover .dv-marquee-track,
+.dv-marquee-wrap:focus-within .dv-marquee-track { animation-play-state: paused; }
+
+/* =====================================================================
+   Cherry Blossom — public DigiVerse site only (.dv-public)
+   Palette: Soft Pink #F2C7C7 · White #FFFFFF · Pale Green #D5F3D8 · Blossom #FFB7C5
+   The internal workspace never carries .dv-public, so it is unaffected.
+   ===================================================================== */
+.dv-app.dv-public {
+  --c-canvas: 255 248 249;
+  --c-mist: 253 238 241;
+  --c-ink: 38 24 43;
+  --c-ink-2: 74 58 80;
+  --c-muted: 120 102 117;
+  --c-line: 242 214 222;
+  --c-coral: 62 168 108;
+  --c-aqua: 62 168 108;
+  --c-sun: 255 183 197;
+  --c-iris-50: 255 244 247;
+  --c-iris-100: 255 230 236;
+  --c-iris-200: 255 205 217;
+  --c-iris-300: 255 183 197;
+  --c-iris-400: 245 143 167;
+  --c-iris-500: 232 104 138;
+  --c-iris-600: 194 59 100;
+  --c-iris-700: 169 46 85;
+  --c-iris-800: 134 36 74;
+  --c-iris-900: 94 26 53;
+  --dv-ink: #26182B;
+  background-color: #FFF8F9;
+  background-image:
+    radial-gradient(1100px 760px at 4% -8%, rgba(242, 199, 199, 0.85), transparent 62%),
+    radial-gradient(900px 640px at 100% 6%, rgba(213, 243, 216, 0.9), transparent 60%),
+    radial-gradient(1000px 700px at 92% 102%, rgba(255, 183, 197, 0.6), transparent 62%),
+    radial-gradient(900px 640px at -6% 98%, rgba(213, 243, 216, 0.75), transparent 60%);
+  background-attachment: fixed;
+}
+.dv-public ::selection { background: rgba(255, 183, 197, 0.55); color: #26182B; }
+.dv-public :focus-visible { outline-color: rgba(194, 59, 100, 0.75); }
+.dv-public .dv-prism-text { background-image: linear-gradient(115deg, #C23B64 0%, #E8688A 42%, #2F9E63 100%); }
+.dv-public .dv-prism-fill { background-image: linear-gradient(115deg, #E8688A 0%, #F58FA7 50%, #7BD3A0 100%); }
+.dv-public .dv-dots { background-image: radial-gradient(rgba(194, 59, 100, 0.14) 1px, transparent 1px); }
+.dv-public .dv-grid-lines {
+  background-image:
+    linear-gradient(rgba(194, 59, 100, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 59, 100, 0.07) 1px, transparent 1px);
+}
+.dv-public .dv-lift:hover { box-shadow: 0 2px 6px rgba(38, 24, 43, 0.05), 0 28px 56px -24px rgba(214, 90, 126, 0.38); }
+.dv-public .dv-border-glow::before {
+  background: conic-gradient(from var(--dv-angle), #FFB7C5, #D5F3D8, #F2C7C7, #FFFFFF, #FFB7C5);
+}
+
+/* Default Tailwind indigo/violet/purple/fuchsia become blossom pink; cyan/sky become pale green */
+.dv-app.dv-public {
+  --c-mint-50: 242 251 243;
+  --c-mint-100: 227 247 230;
+  --c-mint-200: 213 243 216;
+  --c-mint-300: 181 232 188;
+  --c-mint-400: 142 216 155;
+  --c-mint-500: 70 180 110;
+  --c-mint-600: 47 158 99;
+  --c-mint-700: 36 128 80;
+  --c-mint-800: 30 100 66;
+  --c-mint-900: 24 77 52;
+  --c-indigo-50: var(--c-iris-50);
+  --c-indigo-100: var(--c-iris-100);
+  --c-indigo-200: var(--c-iris-200);
+  --c-indigo-300: var(--c-iris-300);
+  --c-indigo-400: var(--c-iris-400);
+  --c-indigo-500: var(--c-iris-500);
+  --c-indigo-600: var(--c-iris-600);
+  --c-indigo-700: var(--c-iris-700);
+  --c-indigo-800: var(--c-iris-800);
+  --c-indigo-900: var(--c-iris-900);
+  --c-indigo-950: var(--c-iris-900);
+  --c-violet-50: var(--c-iris-50);
+  --c-violet-100: var(--c-iris-100);
+  --c-violet-200: var(--c-iris-200);
+  --c-violet-300: var(--c-iris-300);
+  --c-violet-400: var(--c-iris-400);
+  --c-violet-500: var(--c-iris-500);
+  --c-violet-600: var(--c-iris-600);
+  --c-violet-700: var(--c-iris-700);
+  --c-violet-800: var(--c-iris-800);
+  --c-violet-900: var(--c-iris-900);
+  --c-violet-950: var(--c-iris-900);
+  --c-purple-50: var(--c-iris-50);
+  --c-purple-100: var(--c-iris-100);
+  --c-purple-200: var(--c-iris-200);
+  --c-purple-300: var(--c-iris-300);
+  --c-purple-400: var(--c-iris-400);
+  --c-purple-500: var(--c-iris-500);
+  --c-purple-600: var(--c-iris-600);
+  --c-purple-700: var(--c-iris-700);
+  --c-purple-800: var(--c-iris-800);
+  --c-purple-900: var(--c-iris-900);
+  --c-purple-950: var(--c-iris-900);
+  --c-fuchsia-50: var(--c-iris-50);
+  --c-fuchsia-100: var(--c-iris-100);
+  --c-fuchsia-200: var(--c-iris-200);
+  --c-fuchsia-300: var(--c-iris-300);
+  --c-fuchsia-400: var(--c-iris-400);
+  --c-fuchsia-500: var(--c-iris-500);
+  --c-fuchsia-600: var(--c-iris-600);
+  --c-fuchsia-700: var(--c-iris-700);
+  --c-fuchsia-800: var(--c-iris-800);
+  --c-fuchsia-900: var(--c-iris-900);
+  --c-fuchsia-950: var(--c-iris-900);
+  --c-cyan-50: var(--c-mint-50);
+  --c-cyan-100: var(--c-mint-100);
+  --c-cyan-200: var(--c-mint-200);
+  --c-cyan-300: var(--c-mint-300);
+  --c-cyan-400: var(--c-mint-400);
+  --c-cyan-500: var(--c-mint-500);
+  --c-cyan-600: var(--c-mint-600);
+  --c-cyan-700: var(--c-mint-700);
+  --c-cyan-800: var(--c-mint-800);
+  --c-cyan-900: var(--c-mint-900);
+  --c-cyan-950: var(--c-mint-900);
+  --c-sky-50: var(--c-mint-50);
+  --c-sky-100: var(--c-mint-100);
+  --c-sky-200: var(--c-mint-200);
+  --c-sky-300: var(--c-mint-300);
+  --c-sky-400: var(--c-mint-400);
+  --c-sky-500: var(--c-mint-500);
+  --c-sky-600: var(--c-mint-600);
+  --c-sky-700: var(--c-mint-700);
+  --c-sky-800: var(--c-mint-800);
+  --c-sky-900: var(--c-mint-900);
+  --c-sky-950: var(--c-mint-900);
+}
+
+/* Cards: soft pink / pale-green glass instead of flat white */
+.dv-app.dv-public .bg-white.shadow-dv-card {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 238, 242, 0.88) 100%);
+  border-color: rgba(232, 104, 138, 0.16);
+}
+.dv-app.dv-public .bg-white.shadow-dv-card:nth-child(3n + 2) {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 248, 234, 0.9) 100%);
+  border-color: rgba(62, 168, 108, 0.2);
+}
+.dv-app.dv-public .bg-white.shadow-dv-card:nth-child(3n) {
+  background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 226, 226, 0.88) 100%);
+  border-color: rgba(214, 120, 140, 0.2);
+}
+
+/* Section washes: blend pink and green bands behind individual sections */
+.dv-wash-pink {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(242, 199, 199, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+}
+.dv-wash-green {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(213, 243, 216, 0.55) 50%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Falling blossom petals (transform-only, decorative) */
+@keyframes dv-petal {
+  0% { transform: translate3d(0, -12vh, 0) rotate(0deg); }
+  50% { transform: translate3d(var(--sway, 40px), 52vh, 0) rotate(260deg); }
+  100% { transform: translate3d(calc(var(--sway, 40px) * -0.6), 112vh, 0) rotate(520deg); }
+}
+.dv-petal {
+  position: absolute;
+  top: 0;
+  left: var(--l, 50%);
+  width: var(--s, 14px);
+  height: calc(var(--s, 14px) * 1.2);
+  border-radius: 150% 0 150% 0;
+  background: linear-gradient(135deg, #FFE1E8 0%, #FFB7C5 100%);
+  opacity: 0.75;
+  animation: dv-petal var(--d, 26s) linear infinite;
+  animation-delay: var(--dl, 0s);
+  will-change: transform;
+}
+
+/* Phones: lighter effects */
+@media (max-width: 767px) {
+  .dv-app .bg-white.shadow-dv-card { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .dv-marquee-track { --dv-speed: 38s; }
+  .dv-petal:nth-child(n + 6) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dv-app *,
+  .dv-app *::before,
+  .dv-app *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .dv-reveal { opacity: 1; transform: none; }
+  .dv-marquee-wrap { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .dv-marquee-track { animation: none !important; }
+  .dv-marquee-track [data-dup] { display: none; }
+  .dv-border-glow::before { animation: none; }
+  .dv-petal { display: none; }
+}
+
+/* =====================================================================
+   Portfolio templates (pf-*) — shared, performance-friendly motion.
+   Global on purpose: published portfolio sites are not wrapped in .dv-app.
+   ===================================================================== */
+.pf-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--pf-d, 0ms);
+}
+.pf-reveal[data-from="left"] { transform: translateX(-44px); }
+.pf-reveal[data-from="right"] { transform: translateX(44px); }
+.pf-reveal[data-from="scale"] { transform: scale(0.94); }
+.pf-reveal[data-from="fade"] { transform: none; }
+.pf-reveal.is-in { opacity: 1; transform: none; }
+
+@keyframes pf-fade { from { opacity: 0; } to { opacity: 1; } }
+.pf-fade { animation: pf-fade 0.35s ease-out both; }
+@keyframes pf-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -14px, 0); } }
+.pf-float { animation: pf-float 7s ease-in-out infinite; }
+@keyframes pf-marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+.pf-marquee { display: flex; width: max-content; animation: pf-marquee var(--pf-speed, 40s) linear infinite; will-change: transform; }
+.pf-marquee.is-reverse { animation-direction: reverse; }
+.pf-marquee-wrap:hover .pf-marquee { animation-play-state: paused; }
+@keyframes pf-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.pf-blink { animation: pf-blink 1.1s steps(1) infinite; }
+@keyframes pf-type { from { width: 0; } to { width: var(--pf-chars, 24ch); } }
+.pf-type { display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; animation: pf-type 2.2s steps(var(--pf-steps, 24)) 0.4s both; }
+@keyframes pf-spin3d { from { transform: rotateX(-24deg) rotateY(0deg); } to { transform: rotateX(-24deg) rotateY(360deg); } }
+.pf-spin3d { transform-style: preserve-3d; animation: pf-spin3d 24s linear infinite; }
+@keyframes pf-pulse-ring { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.5); opacity: 0; } }
+.pf-ring { animation: pf-pulse-ring 2.8s ease-out infinite; }
+@keyframes pf-draw { to { stroke-dashoffset: 0; } }
+.pf-draw { stroke-dasharray: var(--pf-len, 600); stroke-dashoffset: var(--pf-len, 600); animation: pf-draw 2.4s ease-out forwards; }
+.pf-no-scrollbar { scrollbar-width: none; }
+.pf-no-scrollbar::-webkit-scrollbar { display: none; }
+@media print {
+  .pf-noprint { display: none !important; }
+  .pf-reveal { opacity: 1 !important; transform: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-reveal { opacity: 1; transform: none; transition: none; }
+  .pf-float, .pf-marquee, .pf-blink, .pf-spin3d, .pf-ring, .pf-fade { animation: none !important; }
+  .pf-type { animation: none !important; width: auto; }
+  .pf-draw { animation: none !important; stroke-dashoffset: 0; }
+  .pf-marquee-wrap { overflow-x: auto; }
+  .pf-marquee > [data-dup] { display: none; }
+}
+
+@keyframes pf-kenburns { from { transform: scale(1.02); } to { transform: scale(1.14) translate3d(-1%, -1%, 0); } }
+.pf-kenburns { animation: pf-kenburns 28s ease-out both; will-change: transform; }
+@keyframes pf-scroll-x { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+@keyframes pf-tilt { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.pf-tilt { animation: pf-tilt 6s ease-in-out infinite; }
+@keyframes pf-orbit { from { transform: rotate(0deg) translateX(var(--pf-r, 120px)) rotate(0deg); } to { transform: rotate(360deg) translateX(var(--pf-r, 120px)) rotate(-360deg); } }
+.pf-orbit { animation: pf-orbit var(--pf-t, 14s) linear infinite; }
+@keyframes pf-gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.pf-gradient { background-size: 200% 200%; animation: pf-gradient 12s ease infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .pf-kenburns, .pf-tilt, .pf-orbit, .pf-gradient { animation: none !important; }
+}
+
+@keyframes pf-flow { to { stroke-dashoffset: -40; } }
+.pf-flow { stroke-dasharray: 4 6; animation: pf-flow var(--pf-t, 4s) linear infinite; }
+@media (prefers-reduced-motion: reduce) { .pf-flow { animation: none !important; } }
+
+/* =====================================================================
+   Sports templates (sp-*) — shared, performance-friendly motion.
+   Global on purpose: published sports sites are not wrapped in .dv-app.
+   ===================================================================== */
+.sp-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--sp-d, 0ms);
+}
+.sp-reveal[data-from="left"] { transform: translateX(-40px); }
+.sp-reveal[data-from="right"] { transform: translateX(40px); }
+.sp-reveal[data-from="scale"] { transform: scale(0.95); }
+.sp-reveal[data-from="fade"] { transform: none; }
+.sp-reveal.is-in { opacity: 1; transform: none; }
+@keyframes sp-marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+.sp-marquee { display: flex; width: max-content; animation: sp-marquee var(--sp-speed, 40s) linear infinite; will-change: transform; }
+.sp-marquee-wrap:hover .sp-marquee { animation-play-state: paused; }
+@keyframes sp-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(1.35); } }
+.sp-pulse { animation: sp-pulse 1.4s ease-in-out infinite; }
+@keyframes sp-kenburns { from { transform: scale(1.02); } to { transform: scale(1.12) translate3d(-1%, -1%, 0); } }
+.sp-kenburns { animation: sp-kenburns 26s ease-out both; will-change: transform; }
+@keyframes sp-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -10px, 0); } }
+.sp-float { animation: sp-float 6s ease-in-out infinite; }
+@keyframes sp-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.sp-grow { transform-origin: left; animation: sp-grow 1.1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes sp-sweep { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.sp-sweep { background-size: 200% 100%; animation: sp-sweep 6s linear infinite; }
+.sp-no-scrollbar { scrollbar-width: none; }
+.sp-no-scrollbar::-webkit-scrollbar { display: none; }
+@media print {
+  .sp-noprint { display: none !important; }
+  .sp-reveal { opacity: 1 !important; transform: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-reveal { opacity: 1; transform: none; transition: none; }
+  .sp-marquee, .sp-pulse, .sp-kenburns, .sp-float, .sp-grow, .sp-sweep { animation: none !important; }
+  .sp-marquee-wrap { overflow-x: auto; }
+  .sp-marquee > [data-dup] { display: none; }
+}
+
+/* Sports templates: grid/flex items may shrink below their content so wide tables and nowrap rows scroll instead of widening the page. */
+.sp-root .grid > *, .sp-root .flex > .overflow-x-auto { min-width: 0; }

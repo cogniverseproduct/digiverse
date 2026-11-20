@@ -1,0 +1,432 @@
+{
+ "version": 1,
+ "brandVars": {
+  "--color-3": "accent"
+ },
+ "rules": [
+  {
+   "sel": "title",
+   "text": "titleLine"
+  },
+  {
+   "sel": ".nav__brand",
+   "all": true,
+   "text": "shortName|name"
+  },
+  {
+   "sel": ".nav__brand",
+   "all": true,
+   "logo": "logo"
+  },
+  {
+   "sel": ".nav__search",
+   "remove": true
+  },
+  {
+   "sel": ".nav__tools a[aria-label^='Give']",
+   "remove": true
+  },
+  {
+   "sel": ".nav__links a[href='#hours'], .menu__links a[href='#hours'], .footer__col a[href='#hours']",
+   "all": true,
+   "literal": "Updates"
+  },
+  {
+   "sel": ".nav__links a[href='#causes'], .menu__links a[href='#causes'], .footer__col a[href='#causes']",
+   "all": true,
+   "literal": "Programmes"
+  },
+  {
+   "sel": ".nav__links a[href='#groups'], .menu__links a[href='#groups'], .footer__col a[href='#groups']",
+   "all": true,
+   "literal": "Get involved"
+  },
+  {
+   "sel": ".nav__links a[href='#faq'], .menu__links a[href='#faq'], .footer__col a[href='#faq']",
+   "all": true,
+   "literal": "Questions"
+  },
+  {
+   "sel": ".m-btn-2__label",
+   "literal": "Contact"
+  },
+  {
+   "sel": ".menu__links a[href='#contact'], .footer__col a[href='#contact']",
+   "all": true,
+   "literal": "Contact"
+  },
+  {
+   "sel": ".nav__links a[href='#give'], .menu__links a[href='#give'], .footer__col a[href='#give']",
+   "all": true,
+   "literal": "Support"
+  },
+  {
+   "sel": ".menu__foot a[data-8b-placeholder='phone']",
+   "text": "phone",
+   "emptyRemove": true
+  },
+  {
+   "sel": ".menu__foot a[data-8b-placeholder='phone']",
+   "attr": "href",
+   "value": "tel"
+  },
+  {
+   "sel": ".menu__foot a[data-8b-placeholder='email']",
+   "text": "email",
+   "emptyRemove": true
+  },
+  {
+   "sel": ".menu__foot a[data-8b-placeholder='email']",
+   "attr": "href",
+   "value": "mailto:{email}"
+  },
+  {
+   "sel": "#opening .how__title",
+   "text": "tagline|name"
+  },
+  {
+   "sel": "#opening .how__lead",
+   "text": "mission|about",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#opening .how__head .m-btn-3 .m-btn-3__label",
+   "literal": "Our programmes"
+  },
+  {
+   "sel": "#opening .how__head .m-btn-3",
+   "attr": "href",
+   "value": "\"#causes\""
+  },
+  {
+   "sel": "#opening .how__step",
+   "repeat": "values",
+   "min": 3,
+   "max": 3,
+   "section": "#opening .how__steps",
+   "fields": {
+    ".m-text-5": "$n",
+    "h3": "value",
+    "p": ""
+   }
+  },
+  {
+   "sel": "#hours h2",
+   "literal": "Latest updates"
+  },
+  {
+   "sel": "#hours .hours__intro p",
+   "remove": true
+  },
+  {
+   "sel": "#hours .hours__intro a",
+   "remove": true
+  },
+  {
+   "sel": "#hours .folder",
+   "repeat": "updates",
+   "min": 3,
+   "max": 6,
+   "section": "#hours",
+   "fields": {
+    ".folder__tab": "kindLabel|\"Update\"",
+    ".m-badge": "dateText|date",
+    ".folder__title": "title",
+    ".folder__facts": "",
+    "a.m-link": ""
+   }
+  },
+  {
+   "sel": "#causes h2",
+   "literal": "Our programmes"
+  },
+  {
+   "sel": "#causes .causes__head p",
+   "text": "mission|about",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#causes .cause",
+   "repeat": "programs",
+   "min": 3,
+   "max": 6,
+   "section": "#causes",
+   "fields": {
+    "h3": "title",
+    ".cause__text p": "summary",
+    "img@image!.cause__photo": "image"
+   }
+  },
+  {
+   "sel": "#saturday h2",
+   "literal": "Gallery"
+  },
+  {
+   "sel": "#saturday .saturday__head p",
+   "remove": true
+  },
+  {
+   "sel": "#saturday .frame",
+   "repeat": "gallery",
+   "min": 3,
+   "max": 6,
+   "section": "#saturday",
+   "fields": {
+    "img@image!.frame__photo": "url",
+    ".frame__time": "",
+    "h3": "caption",
+    ".frame__text": ""
+   }
+  },
+  {
+   "sel": "#voices h2",
+   "literal": "Stories from the community"
+  },
+  {
+   "sel": "#voices .voice--main",
+   "repeat": "stories",
+   "min": 1,
+   "max": 1,
+   "section": "#voices",
+   "fields": {
+    "img@image!.voice__photo": "photo",
+    "blockquote p": "quote|excerpt",
+    "figcaption span:first-child": "name|title",
+    "figcaption span:last-child": "location"
+   }
+  },
+  {
+   "sel": "#voices .voice--small",
+   "repeat": "stories",
+   "offset": 1,
+   "min": 1,
+   "max": 2,
+   "fields": {
+    "img@image!.voice__photo": "photo",
+    "blockquote p": "quote|excerpt",
+    "figcaption span:first-child": "name|title",
+    "figcaption span:last-child": "location"
+   }
+  },
+  {
+   "sel": "#streets h2",
+   "literal": "Where we work"
+  },
+  {
+   "sel": "#streets .streets__head p",
+   "remove": true
+  },
+  {
+   "sel": "#streets .street",
+   "repeat": "regions",
+   "min": 3,
+   "grow": true,
+   "section": "#streets",
+   "fields": {
+    ".street__name": "value",
+    ".street__hours": ""
+   }
+  },
+  {
+   "sel": "#groups",
+   "remove": true,
+   "ifEmpty": "volunteer.headline|volunteer.description"
+  },
+  {
+   "sel": "#groups .groups__text h2",
+   "text": "volunteer.headline|\"Get involved\""
+  },
+  {
+   "sel": "#groups .groups__text > p",
+   "text": "volunteer.description",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#groups .groups__photo img",
+   "image": "images.0|hero",
+   "emptyRemove": ".groups__photo"
+  },
+  {
+   "sel": "#groups .groups__points li",
+   "repeat": "volunteer.roles",
+   "min": 1,
+   "max": 3,
+   "section": "#groups .groups__points",
+   "fields": {
+    "h3": "name",
+    "p": "commitment|location"
+   }
+  },
+  {
+   "sel": "#groups a.m-btn .m-btn__label",
+   "literal": "Get in touch"
+  },
+  {
+   "sel": "#groups a.m-btn",
+   "attr": "href",
+   "value": "mailto:{email}",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#give",
+   "remove": true,
+   "ifEmpty": "support.text|support.headline"
+  },
+  {
+   "sel": "#give h2",
+   "text": "support.headline|\"How you can support us\""
+  },
+  {
+   "sel": "#give .give__text > p",
+   "text": "support.text",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#give form",
+   "remove": true
+  },
+  {
+   "sel": "#give .give__cards",
+   "remove": true
+  },
+  {
+   "sel": "#faq h2",
+   "literal": "Questions"
+  },
+  {
+   "sel": "#faq .faq__head p",
+   "text": "Anything else? Call {phone}",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#faq .faq__item",
+   "repeat": "faqs",
+   "min": 1,
+   "grow": true,
+   "section": "#faq",
+   "fields": {
+    "summary h3": "question",
+    ".faq__answer": "answer"
+   }
+  },
+  {
+   "sel": "#contact h2",
+   "literal": "Get in touch"
+  },
+  {
+   "sel": "#contact .contact__lead",
+   "text": "about|mission",
+   "emptyRemove": true
+  },
+  {
+   "sel": "#contact .contact__card",
+   "repeat": "people",
+   "min": 3,
+   "max": 5,
+   "section": "#contact .contact__sky",
+   "fields": {
+    "img@image!.contact__card": "photo",
+    "img@alt": "name"
+   }
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(1) dt",
+   "literal": "Visit"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(1) dd:nth-of-type(1)",
+   "text": "address|cityLine",
+   "emptyRemove": ".contact__details > div"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(1) dd:nth-of-type(2)",
+   "remove": true
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(2) a",
+   "text": "phone",
+   "emptyRemove": ".contact__details > div"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(2) a",
+   "attr": "href",
+   "value": "tel"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(2) dd:nth-of-type(2)",
+   "remove": true
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(3) dd:nth-of-type(1) a",
+   "text": "email",
+   "emptyRemove": ".contact__details > div"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(3) dd:nth-of-type(1) a",
+   "attr": "href",
+   "value": "mailto:{email}"
+  },
+  {
+   "sel": "#contact .contact__details > div:nth-child(3) dd:nth-of-type(2)",
+   "remove": true
+  },
+  {
+   "sel": ".footer__pitch",
+   "text": "mission|tagline|about",
+   "emptyRemove": true
+  },
+  {
+   "sel": ".footer__col:nth-child(2) h2",
+   "literal": "Explore"
+  },
+  {
+   "sel": ".footer__col:nth-child(3) h2",
+   "literal": "Get involved"
+  },
+  {
+   "sel": ".footer__col:nth-child(4) h2",
+   "literal": "Contact"
+  },
+  {
+   "sel": ".footer__col:nth-child(4) a[data-8b-placeholder='phone']",
+   "text": "phone",
+   "emptyRemove": "li"
+  },
+  {
+   "sel": ".footer__col:nth-child(4) a[data-8b-placeholder='phone']",
+   "attr": "href",
+   "value": "tel"
+  },
+  {
+   "sel": ".footer__col:nth-child(4) a[data-8b-placeholder='email']",
+   "text": "email",
+   "emptyRemove": "li"
+  },
+  {
+   "sel": ".footer__col:nth-child(4) a[data-8b-placeholder='email']",
+   "attr": "href",
+   "value": "mailto:{email}"
+  },
+  {
+   "sel": ".footer__mark",
+   "text": "shortName|name"
+  },
+  {
+   "sel": ".footer__mark",
+   "lenVar": "--len",
+   "of": "shortName|name"
+  },
+  {
+   "sel": ".footer__legal p:nth-child(1)",
+   "text": "address|cityLine",
+   "emptyRemove": true
+  },
+  {
+   "sel": ".footer__legal p:last-child",
+   "text": "© {year} {name}"
+  }
+ ],
+ "pruneIfNoLinks": [
+  ".footer__col"
+ ]
+}

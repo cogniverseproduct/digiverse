@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "appliedAt": "2026-11-20T06:11:34.555Z",
+  "from": "cogniverse.digiverse@gmail.com",
+  "to": "contact@cogniverse.co.in",
+  "changes": [
+    {
+      "table": "users",
+      "rowId": "7532044a-5c76-4936-9f5b-8895ceb663e3",
+      "column": "email",
+      "oldValue": "cogniverse.digiverse@gmail.com",
+      "newValue": "contact@cogniverse.co.in"
+    }
+  ]
+}

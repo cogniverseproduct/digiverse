@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "brandVars": { "--brand": "primary", "--accent": "accent" },
+  "keepImages": [".hero-art img"],
+  "pruneEmpty": [".chips", ".footer nav", ".stats-wrap"],
+  "rules": [
+    { "sel": "title", "text": "titleLine" },
+
+    { "sel": ".nav [data-zt=\"brandName\"]", "text": "shortName|name" },
+    { "sel": ".footer [data-zt=\"brandName\"]", "all": true, "text": "shortName|name" },
+    { "sel": ".nav .logo", "logo": "logo", "height": 26 },
+
+    { "sel": ".chips time", "text": "dateRange", "emptyRemove": ".chip" },
+    { "sel": ".chips time", "attr": "datetime", "value": "startDate" },
+    { "sel": ".chips .chip:nth-child(2)", "text": "venueLine", "textNode": true, "emptyRemove": true },
+
+    { "sel": "h1", "text": "nameLead|\" \"", "textNode": true, "trailingSpace": true },
+    { "sel": "h1 .grad", "text": "nameLast" },
+    { "sel": ".hero .lead", "text": "description|tagline", "emptyRemove": true },
+
+    { "sel": ".cta-row a.btn:not(.btn-ghost)", "attr": "href", "value": "bookingUrl|\"#tickets\"" },
+    { "sel": ".nav a.btn-sm", "attr": "href", "value": "bookingUrl|\"#tickets\"" },
+    { "sel": ".countdown", "attr": "data-countdown", "value": "startsAtIso", "emptyRemove": true },
+    { "sel": ".early", "remove": true },
+
+    { "sel": ".stats > div", "repeat": "stats", "min": 1, "section": ".stats", "fields": { "dt": "label", "dd": "value" } },
+
+    { "sel": ".spk-grid > li.spk", "repeat": "speakers", "min": 1, "section": "#speakers", "proto": ".spk-grid > li.spk",
+      "fields": { "img@image": "photo", "img@alt": "Portrait of {name}", "h3": "name", ".spk-info p:not(.talk)": "role", ".talk": "“{topic}”" } },
+
+    { "sel": "#schedule", "remove": true, "ifEmpty": "days.0.n" },
+    { "sel": ".tracks-key .tk", "repeat": "tracks", "min": 1, "section": ".tracks-key", "proto": ".tracks-key .tk",
+      "fields": { "@class": "tk {cycle(n; t-main, t-build, t-design)}", ":scope": "name" } },
+    { "sel": ".tablist button[role=\"tab\"]", "repeat": "days", "min": 1, "proto": ".tablist button[role=\"tab\"]",
+      "fields": { "@id": "tab-d{n}", "@aria-controls": "p-d{n}", "strong": "label", "span": "dateText" } },
+    { "sel": ".tabs > .panel", "repeat": "days", "min": 1, "proto": ".tabs > .panel",
+      "fields": { "@id": "p-d{n}", "@aria-labelledby": "tab-d{n}", ".day-h": "heading" },
+      "nested": [
+        { "sel": ".slots > .slot", "repeat": "slots", "min": 1, "proto": ".slots > .slot:nth-child(3)",
+          "fields": { "time": "time" },
+          "nested": [
+            { "sel": ".sessions > .sess", "repeat": "sessions", "min": 1, "proto": ".sessions > .sess.t-main:not(.s-wide)",
+              "fields": {
+                "@class": "sess {cycle(trackN; t-main, t-build, t-design)} {cycle(kindN; x-normal, s-wide, s-break)}",
+                ".tk@class": "tk {cycle(trackN; t-main, t-build, t-design)}",
+                ".tk": "track", "strong": "title", ".who": "who"
+              } }
+          ] }
+      ] },
+
+    { "sel": ".tix-grid > article.tix", "repeat": "tickets", "min": 1, "section": "#tickets", "proto": ".tix-grid > article.tix.hot",
+      "fields": {
+        "@class": "tix {cycle(hotN; x-plain, hot)}", ".ribbon": "badge", "h3": "name", ".tix-price": "price", ".tix-note": "description", ".bar": "\"\"",
+        "a.btn@href": "url", "a.btn": "\"Get this pass\""
+      },
+      "nested": [
+        { "sel": "ul > li", "repeat": "features", "grow": true, "min": 1, "section": "ul", "fields": { ":scope": "value" } }
+      ] },
+
+    { "sel": ".sponsors", "remove": true, "ifEmpty": "sponsors.0.name" },
+    { "sel": ".spo-cta", "remove": true },
+    { "sel": ".spo-plat > li", "repeat": "topSponsors", "min": 1, "section": ".spo-plat", "proto": ".spo-plat > li", "fields": { ":scope": "name" } },
+    { "sel": "ul.spo:not(.spo-plat) > li", "repeat": "otherSponsors", "min": 1, "section": "ul.spo:not(.spo-plat)", "proto": "ul.spo:not(.spo-plat) > li", "fields": { ":scope": "name" } },
+
+    { "sel": "#venue", "remove": true, "ifEmpty": "venueName|venueAddress" },
+    { "sel": ".venue-map", "remove": true },
+    { "sel": "#ven-h", "text": "venueName" },
+    { "sel": ".venue-copy address", "text": "{venueAddress}, {cityLine}", "emptyRemove": true },
+    { "sel": ".travel > li", "repeat": "travel", "min": 1, "section": ".travel", "proto": ".travel > li", "fields": { "strong": "label", "span": "text" } },
+
+    { "sel": ".faq-list details", "repeat": "faqs", "min": 1, "section": "#faq", "proto": ".faq-list details:nth-child(2)", "fields": { "summary": "question", "p": "answer" } },
+
+    { "sel": ".cta-band", "remove": true },
+
+    { "sel": ".footer .small", "text": "© {year} {name}" },
+    { "sel": ".footer nav a:not([href^=\"mailto:\"])", "all": true, "remove": true },
+    { "sel": ".footer nav a[href^=\"mailto:\"]", "attr": "href", "value": "mailto", "emptyRemove": true }
+  ]
+}

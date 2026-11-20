@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "brandVars": {
+    "--brand": "primary",
+    "--accent": "accent"
+  },
+  "pruneEmpty": [
+    ".fade.d4",
+    ".top .contact"
+  ],
+  "pruneIfNoLinks": [
+    ".socials"
+  ],
+  "rules": [
+    {
+      "sel": "title",
+      "text": "titleLine"
+    },
+    {
+      "sel": "meta[name=\"description\"]",
+      "attr": "content",
+      "value": "description|tagline",
+      "emptyRemove": true
+    },
+    {
+      "sel": "meta[property^=\"og:\"]",
+      "all": true,
+      "remove": true
+    },
+    {
+      "sel": ".top .logo [data-zt=\"brandName\"]",
+      "text": "shortName|name"
+    },
+    {
+      "sel": ".top .logo",
+      "attr": "aria-label",
+      "value": "{shortName|name} home"
+    },
+    {
+      "sel": ".top .contact",
+      "attr": "href",
+      "value": "mailto",
+      "emptyRemove": true
+    },
+    {
+      "sel": ".top .contact",
+      "text": "email"
+    },
+    {
+      "sel": ".eyebrow",
+      "text": "edition|venueLine",
+      "emptyRemove": true
+    },
+    {
+      "sel": "h1",
+      "text": "nameLead",
+      "textNode": "first",
+      "trailingSpace": true
+    },
+    {
+      "sel": "h1 em",
+      "text": "nameLast"
+    },
+    {
+      "sel": "h1",
+      "text": "\" \"",
+      "textNode": true
+    },
+    {
+      "sel": ".lead",
+      "text": "description|tagline",
+      "emptyRemove": true
+    },
+    {
+      "sel": "section[aria-label=\"Countdown to launch\"]",
+      "remove": true,
+      "ifEmpty": "startsAtIso"
+    },
+    {
+      "sel": "#countdown",
+      "attr": "data-date",
+      "value": "startsAtIso"
+    },
+    {
+      "sel": ".launch-date",
+      "text": "\"Reveal on\"",
+      "textNode": "first",
+      "trailingSpace": true
+    },
+    {
+      "sel": ".signup a.signup-cta",
+      "attr": "href",
+      "value": "bookingUrl|product.url|mailto"
+    },
+    {
+      "sel": ".signup a.signup-cta",
+      "text": "product.ctaText|\"Find out more\""
+    },
+    {
+      "sel": ".signup",
+      "remove": true,
+      "ifEmpty": "bookingUrl|product.url|mailto"
+    },
+    {
+      "sel": ".privacy",
+      "remove": true
+    },
+    {
+      "sel": ".bottom > span",
+      "text": "© {year} {shortName|name}"
+    },
+    {
+      "sel": ".socials li:nth-child(1) a",
+      "attr": "href",
+      "value": "socialBy.instagram",
+      "emptyRemove": "li"
+    },
+    {
+      "sel": ".socials li:nth-child(1) a",
+      "attr": "aria-label",
+      "value": "{shortName|name} on Instagram"
+    },
+    {
+      "sel": ".socials li:nth-child(2)",
+      "remove": true
+    },
+    {
+      "sel": ".socials li:nth-child(3)",
+      "remove": true
+    },
+    {
+      "sel": ".socials li:nth-child(4) a",
+      "attr": "href",
+      "value": "mailto",
+      "emptyRemove": "li"
+    },
+    {
+      "sel": ".socials li:nth-child(4) a",
+      "attr": "aria-label",
+      "value": "Email {shortName|name}"
+    }
+  ]
+}

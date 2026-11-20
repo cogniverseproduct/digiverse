@@ -1,0 +1,16 @@
+{
+  "name": "digiverse",
+  "private": true,
+  "type": "module",
+  "description": "DigiVerse workspace root: Vercel deployment entry (api/, vercel.json). The app itself lives in client/ and server/.",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix server && npm run build --prefix client && npm run build:site-bundle",
+    "build:site-bundle": "node server/scripts/build-site-bundle.mjs",
+    "vercel:check": "node scripts/check-vercel-readiness.mjs"
+  }
+}

@@ -1,0 +1,298 @@
+import type {
+  PortfolioTemplateDefinition,
+  PortfolioTemplateId
+} from './types';
+import {
+  getNovaDemo,
+  getCreativeStudioDemo,
+  getVisionDemo,
+  getMotionverseDemo,
+  getAcademicProDemo,
+  getBrandbuilderDemo
+} from './demos/portfolioDemos';
+
+export const PORTFOLIO_TEMPLATES: Record<PortfolioTemplateId, PortfolioTemplateDefinition> = {
+  // =========================================================================
+  // 1. NOVA (Developer & Software Engineer)
+  // =========================================================================
+  nova: {
+    id: 'nova',
+    name: 'NOVA',
+    tagline: 'Technical Visual Language, Terminal Prompts & Architecture Blueprints',
+    description: 'Tailored for senior software engineers, systems architects, and open-source maintainers. Features command-line header motifs, interactive skill proficiency matrices, GitHub-inspired commit activity indicators, repository metrics, and structured career timeline nodes.',
+    category: 'developer',
+    archetype: 'developer',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: 'TECHNICAL ARCHITECTURE',
+    designDirection: 'Deep terminal canvas `#090D16` with cyan `#0284c7` and sky `#38bdf8` luminescence, JetBrains Mono & Space Grotesk code typography, modular metric cards.',
+    highlights: [
+      'Interactive terminal command bar with live shell prompts',
+      'Categorized skills grid with proficiency badges & years of mastery',
+      'System architecture project cards with live demo & GitHub repo links',
+      'Milestone-driven career experience timeline with tech tags',
+      'Clean encrypted direct message / contact shell'
+    ],
+    tokens: {
+      primaryColor: '#090D16',
+      accentColor: '#0284c7',
+      secondaryColor: '#38bdf8',
+      surfaceBg: 'bg-[#090D16]',
+      cardBg: 'bg-[#0f172a]/90',
+      cardBorder: 'border-cyan-500/30',
+      cardHover: 'hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10',
+      heroGradient: 'from-[#060911] via-[#090D16] to-[#0f172a]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Space Grotesk, JetBrains Mono, monospace',
+      badgeClass: 'bg-cyan-950/60 text-cyan-300 border-cyan-700/50',
+      primaryBtnClass: 'bg-cyan-600 hover:bg-cyan-500 text-white font-mono font-medium shadow-lg shadow-cyan-600/25',
+      secondaryBtnClass: 'border border-cyan-700/50 text-cyan-300 hover:bg-cyan-950/50 font-mono',
+      layoutPreset: 'split'
+    },
+    pages: [
+      { slug: '/', title: 'Overview', navLabel: 'Overview', description: 'Terminal Intro, Key Metrics & Featured Systems' },
+      { slug: '/projects', title: 'Architecture & Repositories', navLabel: 'Projects', description: 'Open Source Systems, Microservices & Benchmarks' },
+      { slug: '/experience', title: 'Career Milestones', navLabel: 'Experience', description: 'Staff Engineering History & Scale Accomplishments' },
+      { slug: '/contact', title: 'Terminal Dispatch', navLabel: 'Contact', description: 'Encrypted Inquiries & Open Project Availability' }
+    ],
+    getDemoData: getNovaDemo
+  },
+
+  // =========================================================================
+  // 2. CREATIVE STUDIO (UI/UX & Graphic Designer)
+  // =========================================================================
+  creative_studio: {
+    id: 'creative_studio',
+    name: 'Creative Studio',
+    tagline: 'Asymmetric Editorial Layout, Expressive Typography & Deep Case Studies',
+    description: 'Art-directed for product designers, creative directors, and visual stylists. Features an editorial canvas with bold typography, dynamic kinetic marquee accents, structured problem-to-metrics case study breakdowns, and design system token showcases.',
+    category: 'designer',
+    archetype: 'designer',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: 'EDITORIAL & ART DIRECTION',
+    designDirection: 'Matte obsidian canvas `#0d0d0d` with vibrant flame orange `#f97316` accents, Clash Display editorial typography, dynamic grid asymmetry.',
+    highlights: [
+      'Bold editorial hero with kinetic headline treatments',
+      'In-depth case study cards highlighting problem, solution & verified ROI',
+      'Design system token & typography hierarchy previews',
+      'Client testimonials with role and verification tags',
+      'Seamless multi-device mockup framing'
+    ],
+    tokens: {
+      primaryColor: '#0d0d0d',
+      accentColor: '#f97316',
+      secondaryColor: '#fb923c',
+      surfaceBg: 'bg-[#0d0d0d]',
+      cardBg: 'bg-[#171717]',
+      cardBorder: 'border-orange-500/20',
+      cardHover: 'hover:border-orange-500/50 hover:shadow-xl hover:shadow-orange-500/5',
+      heroGradient: 'from-[#0a0a0a] via-[#121212] to-[#1e140d]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Clash Display, Syne, sans-serif',
+      badgeClass: 'bg-orange-950/60 text-orange-300 border-orange-700/50',
+      primaryBtnClass: 'bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-semibold shadow-lg shadow-orange-600/20',
+      secondaryBtnClass: 'border border-orange-500/30 text-orange-300 hover:bg-orange-950/30',
+      layoutPreset: 'editorial'
+    },
+    pages: [
+      { slug: '/', title: 'Selected Works', navLabel: 'Works', description: 'Curated Case Studies & Creative Highlights' },
+      { slug: '/case-studies', title: 'Case Study Archive', navLabel: 'Case Studies', description: 'Deep Dives: Problem, Process, Tokens & Metrics' },
+      { slug: '/about', title: 'Design Philosophy', navLabel: 'About', description: 'Creative Background, Principles & Experience' },
+      { slug: '/contact', title: 'Project Inquiry', navLabel: 'Contact', description: 'Design Sprints & Art Direction Engagements' }
+    ],
+    getDemoData: getCreativeStudioDemo
+  },
+
+  // =========================================================================
+  // 3. VISION (Photography & Visual Artist)
+  // =========================================================================
+  vision: {
+    id: 'vision',
+    name: 'VISION',
+    tagline: 'Cinematic Dark Canvas, Full-Bleed Imagery & Curated Exhibitions',
+    description: 'Engineered for fine art photographers, documentary visualists, and architectural chroniclers. Features a pure darkroom environment, expansive full-bleed imagery, lightbox viewer support, optics metadata indicators, and print collection inquiry flows.',
+    category: 'photographer',
+    archetype: 'photographer',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: 'CINEMATIC DARKROOM',
+    designDirection: 'Pitch black canvas `#050505` with delicate platinum `#e2e8f0` and slate `#94a3b8` accents, Playfair Display serif title treatment, spacious full-bleed imagery.',
+    highlights: [
+      'Full-bleed visual canvas maximizing photographic impact',
+      'Curated series navigation (Landscapes, Monoliths, Portraits)',
+      'Photographic optics and medium-format kit breakdown',
+      'Archival print acquisition & gallery exhibition registry',
+      'Distraction-free high-resolution responsive layout'
+    ],
+    tokens: {
+      primaryColor: '#050505',
+      accentColor: '#e2e8f0',
+      secondaryColor: '#94a3b8',
+      surfaceBg: 'bg-[#050505]',
+      cardBg: 'bg-[#111111]',
+      cardBorder: 'border-white/10',
+      cardHover: 'hover:border-white/30 hover:shadow-2xl hover:shadow-white/5',
+      heroGradient: 'from-[#050505] via-[#0d0d0d] to-[#141414]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Playfair Display, Georgia, serif',
+      badgeClass: 'bg-white/10 text-slate-200 border-white/20',
+      primaryBtnClass: 'bg-white hover:bg-slate-200 text-black font-medium tracking-wide shadow-lg shadow-white/10',
+      secondaryBtnClass: 'border border-white/20 text-slate-300 hover:bg-white/10',
+      layoutPreset: 'grid'
+    },
+    pages: [
+      { slug: '/', title: 'Exhibitions', navLabel: 'Exhibitions', description: 'Curated Photo Series & Featured Visual Studies' },
+      { slug: '/series', title: 'Complete Collections', navLabel: 'Series', description: 'All Documented Expeditions & Monographs' },
+      { slug: '/gear', title: 'Optics & Gear Kit', navLabel: 'Optics', description: 'Medium Format Systems, Glass & Darkroom Specs' },
+      { slug: '/contact', title: 'Print & Licensing Desk', navLabel: 'Acquire', description: 'Archival Print Sales & Editorial Assignments' }
+    ],
+    getDemoData: getVisionDemo
+  },
+
+  // =========================================================================
+  // 4. MOTIONVERSE (Motion Graphics & 3D Artist)
+  // =========================================================================
+  motionverse: {
+    id: 'motionverse',
+    name: 'MOTIONVERSE',
+    tagline: 'Kinetic Motion Rhythm, Interactive Showreels & 3D Render Breakdowns',
+    description: 'Crafted for 3D generalists, VFX artists, and motion designers. Features dynamic video showcase framing, 3D asset breakdown comparisons (wireframe/clay vs shaded passes), client collaboration badges, and commission request desks.',
+    category: 'motion_3d',
+    archetype: 'motion_3d',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: '3D VFX & KINETIC',
+    designDirection: 'Cosmic dark `#030712` canvas with electric violet `#8b5cf6` and purple `#a855f7` glows, geometric typography, embedded high-bitrate video containers.',
+    highlights: [
+      'Widescreen cinematic showreel player integration (YouTube / Drive)',
+      '3D model breakdown slots highlighting shaders, wireframes & clay',
+      'Client collaboration logo ribbons (AAA Gaming & Commercials)',
+      'Real-time simulation tech stack (Houdini, Unreal 5, Octane)',
+      'Commission pipeline inquiry form'
+    ],
+    tokens: {
+      primaryColor: '#030712',
+      accentColor: '#8b5cf6',
+      secondaryColor: '#a855f7',
+      surfaceBg: 'bg-[#030712]',
+      cardBg: 'bg-[#0b0f19]/90',
+      cardBorder: 'border-purple-500/25',
+      cardHover: 'hover:border-purple-400/60 hover:shadow-xl hover:shadow-purple-500/10',
+      heroGradient: 'from-[#030712] via-[#090b1e] to-[#140b2b]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Space Grotesk, sans-serif',
+      badgeClass: 'bg-purple-950/60 text-purple-300 border-purple-700/50',
+      primaryBtnClass: 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-purple-600/25',
+      secondaryBtnClass: 'border border-purple-500/30 text-purple-300 hover:bg-purple-950/40',
+      layoutPreset: 'split'
+    },
+    pages: [
+      { slug: '/', title: 'Showreel & Work', navLabel: 'Showreel', description: '4K Reel Showcase, Key Shots & Render Highlights' },
+      { slug: '/breakdowns', title: '3D & VFX Breakdowns', navLabel: 'Breakdowns', description: 'Wireframe, Procedural Simulation & LookDev Layers' },
+      { slug: '/clients', title: 'Client Collaborations', navLabel: 'Clients', description: 'Commercial Spots, Game Trailers & Installations' },
+      { slug: '/contact', title: 'Commission Desk', navLabel: 'Commission', description: 'Project Scope, Render Timelines & Availability' }
+    ],
+    getDemoData: getMotionverseDemo
+  },
+
+  // =========================================================================
+  // 5. ACADEMIC PRO (Academic & Research Professional)
+  // =========================================================================
+  academic_pro: {
+    id: 'academic_pro',
+    name: 'ACADEMIC PRO',
+    tagline: 'Scholarly Integrity, Publication Bibliographies & Grant Ledgers',
+    description: 'Designed for university professors, research scientists, and postdoctoral fellows. Features clean editorial typography, peer-reviewed publication listings with DOI links and BibTeX copy triggers, research grant ledgers, and downloadable curriculum vitae.',
+    category: 'academic',
+    archetype: 'academic_pro',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: 'SCHOLARLY & RESEARCH',
+    designDirection: 'Oxford blue canvas `#0b0f19` with deep sapphire `#1e3a8a` and celestial blue `#60a5fa` accents, Cinzel & Garamond serif readability, bibliographic typography.',
+    highlights: [
+      'Comprehensive research publication ledger with DOI links & BibTeX copy',
+      'Research grant awards & federal sponsorship ledger',
+      'University appointments and teaching curriculum syllabus links',
+      'Doctoral advising & laboratory alumni roster',
+      'One-click downloadable full academic curriculum vitae (CV)'
+    ],
+    tokens: {
+      primaryColor: '#0b0f19',
+      accentColor: '#1e3a8a',
+      secondaryColor: '#60a5fa',
+      surfaceBg: 'bg-[#0b0f19]',
+      cardBg: 'bg-[#111827]',
+      cardBorder: 'border-blue-500/20',
+      cardHover: 'hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/10',
+      heroGradient: 'from-[#070b14] via-[#0b0f19] to-[#0f1d38]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Cinzel, Garamond, serif',
+      badgeClass: 'bg-blue-950/60 text-blue-300 border-blue-700/50',
+      primaryBtnClass: 'bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg shadow-blue-600/25',
+      secondaryBtnClass: 'border border-blue-500/30 text-blue-300 hover:bg-blue-950/50',
+      layoutPreset: 'editorial'
+    },
+    pages: [
+      { slug: '/', title: 'Academic Profile', navLabel: 'Profile', description: 'Faculty Overview, Core Research Focus & Laboratory Mission' },
+      { slug: '/publications', title: 'Peer-Reviewed Research', navLabel: 'Publications', description: 'Journal Papers, Conference Proceedings & BibTeX' },
+      { slug: '/teaching', title: 'Courses & Pedagogy', navLabel: 'Teaching', description: 'Undergraduate & Graduate Course Syllabi' },
+      { slug: '/cv', title: 'Curriculum Vitae', navLabel: 'Full CV', description: 'Appointments, Grants, Honors & Downloadable PDF' }
+    ],
+    getDemoData: getAcademicProDemo
+  },
+
+  // =========================================================================
+  // 6. BRANDBUILDER (Personal Brand & Freelancer)
+  // =========================================================================
+  brandbuilder: {
+    id: 'brandbuilder',
+    name: 'BRANDBUILDER',
+    tagline: 'High-Conversion Value Proposition, Client Testimonials & Service Tiers',
+    description: 'Built for executive coaches, growth consultants, and top-tier freelancers. Features conversion-focused headline architecture, social proof testimonial blocks, transparent service package deliverables, media feature press mentions, and strategy call hooks.',
+    category: 'freelancer_brand',
+    archetype: 'personal_brand',
+    version: '1.0.0',
+    author: 'DigiVerse Portfolio Studio',
+    badge: 'CONVERSION & GROWTH',
+    designDirection: 'Sophisticated onyx canvas `#0a0a0a` with emerald `#10b981` and mint `#34d399` accents, Plus Jakarta Sans modern typography, high-impact CTA hierarchy.',
+    highlights: [
+      'Conversion-engineered value proposition hero with immediate CTA hook',
+      'Productized service packages with transparent deliverables & pricing',
+      'Verified client testimonial cards with metrics and ROI proof',
+      'Media, podcast, and publication press logos ribbon',
+      'Direct strategy consultation booking integration'
+    ],
+    tokens: {
+      primaryColor: '#0a0a0a',
+      accentColor: '#10b981',
+      secondaryColor: '#34d399',
+      surfaceBg: 'bg-[#0a0a0a]',
+      cardBg: 'bg-[#141414]',
+      cardBorder: 'border-emerald-500/20',
+      cardHover: 'hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-500/10',
+      heroGradient: 'from-[#070b09] via-[#0a0a0a] to-[#0c1a14]',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      headingFont: 'Plus Jakarta Sans, sans-serif',
+      badgeClass: 'bg-emerald-950/60 text-emerald-300 border-emerald-700/50',
+      primaryBtnClass: 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-600/25',
+      secondaryBtnClass: 'border border-emerald-500/30 text-emerald-300 hover:bg-emerald-950/40',
+      layoutPreset: 'split'
+    },
+    pages: [
+      { slug: '/', title: 'Growth Advisor', navLabel: 'Home', description: 'Value Proposition, Client Results & Track Record' },
+      { slug: '/services', title: 'Advisory Packages', navLabel: 'Services', description: 'Productized GTM Sprints & Fractional Leadership' },
+      { slug: '/results', title: 'Client Results & ROI', navLabel: 'Results', description: 'Verified Client Case Studies & Testimonials' },
+      { slug: '/contact', title: 'Book Strategy Call', navLabel: 'Book Call', description: 'Direct 30-Minute Advisory Consultation Scheduling' }
+    ],
+    getDemoData: getBrandbuilderDemo
+  }
+};
+
+export const getPortfolioTemplateList = (): PortfolioTemplateDefinition[] => {
+  return Object.values(PORTFOLIO_TEMPLATES);
+};
+
+export const getPortfolioTemplateById = (id: string): PortfolioTemplateDefinition | undefined => {
+  return (PORTFOLIO_TEMPLATES as Record<string, PortfolioTemplateDefinition>)[id];
+};

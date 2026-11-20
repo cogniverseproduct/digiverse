@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "pruneIfNoLinks": [".nav__links", ".menu__links", ".footer__cols > div:nth-child(1)", ".footer__cols > div:nth-child(2)", ".footer__cols > div:nth-child(3)"],
+  "rules": [
+    { "sel": "title", "text": "titleLine" },
+    { "sel": "meta[name=\"description\"]", "attr": "content", "value": "mission|about|tagline", "emptyRemove": true },
+    { "sel": "meta[property^=\"og:\"]", "all": true, "remove": true },
+    { "sel": "meta[name=\"twitter:card\"]", "remove": true },
+    { "sel": "meta[name=\"generator\"]", "remove": true },
+
+    { "sel": ".nav__brand", "attr": "aria-label", "value": "{shortName|name}, back to the top" },
+    { "sel": ".nav__name", "text": "shortName|name" },
+    { "sel": ".nav__links a[href=\"#squads\"], #menu a[href=\"#squads\"], .footer__cols a[href=\"#squads\"]", "all": true, "literal": "Programmes" },
+    { "sel": ".nav__links a[href=\"#promises\"], #menu a[href=\"#promises\"]", "all": true, "literal": "Values" },
+    { "sel": ".nav__links a[href=\"#coaches\"], #menu a[href=\"#coaches\"], .footer__cols a[href=\"#coaches\"]", "all": true, "literal": "Our team" },
+    { "sel": ".nav__links a[href=\"#fees\"], #menu a[href=\"#fees\"], .footer__cols a[href=\"#fees\"]", "all": true, "remove": true },
+    { "sel": "#menu a[href=\"#join\"], .footer__cols a[href=\"#join\"]", "all": true, "literal": "Volunteer" },
+    { "sel": ".footer__cols a[href=\"#faq\"]", "literal": "Questions" },
+    { "sel": ".footer__cols a[href=\"#contact\"]", "literal": "Get in touch" },
+    { "sel": ".nav__cta .m-btn-2__label", "literal": "Get in touch" },
+
+    { "sel": ".opening__club", "text": "{name} · {cityLine}", "emptyRemove": true },
+    { "sel": ".opening__statement", "text": "mission|about|tagline" },
+    { "sel": ".opening__actions .m-btn .m-btn__label", "literal": "Our programmes" },
+    { "sel": ".opening__actions .m-link", "literal": "Our values" },
+    { "sel": ".opening__huddle img", "image": "hero|gallery.0.url", "emptyRemove": "figure" },
+
+    { "sel": "#squads", "remove": true, "ifEmpty": "programs.0.title" },
+    { "sel": "#squads-title .line:nth-child(1)", "literal": "Our" },
+    { "sel": "#squads-title .line:nth-child(2)", "literal": "work" },
+    { "sel": ".squads__intro", "remove": true },
+    { "sel": ".squads__deck > li.squads__card", "repeat": "programs", "min": 1, "grow": true, "max": 8, "section": "#squads",
+      "fields": { ".squads__age": "beneficiaries|category", ".squads__name": "title", "img@image!figure": "image", ".squads__days": "{location}", ".squads__text": "summary|description" },
+      "nested": [ { "sel": ".squads__tags > li", "repeat": "outcomes", "min": 1, "grow": true, "section": ".squads__tags", "fields": { ":scope": "value" } } ] },
+
+    { "sel": "#week", "remove": true },
+
+    { "sel": "#promises", "remove": true, "ifEmpty": "values.0" },
+    { "sel": "#promises-title .line:nth-child(1)", "literal": "Our" },
+    { "sel": "#promises-title .line:nth-child(2)", "literal": "values" },
+    { "sel": ".promises__intro", "remove": true },
+    { "sel": ".promises__list > li.promises__item", "repeat": "values", "min": 1, "max": 4, "section": "#promises",
+      "fields": { ".promises__line": "value" },
+      "nested": [ { "sel": ".promises__text", "remove": true } ] },
+
+    { "sel": "#fixtures", "remove": true },
+
+    { "sel": "#coaches", "remove": true, "ifEmpty": "people.0.name" },
+    { "sel": "#coaches-title .line:nth-child(1)", "literal": "Our" },
+    { "sel": "#coaches-title .line:nth-child(2)", "literal": "team" },
+    { "sel": ".coaches__intro", "remove": true },
+    { "sel": ".coaches__list > li.coaches__row", "repeat": "people", "min": 1, "grow": true, "max": 8, "section": "#coaches",
+      "fields": { ".coaches__first": "first", ".coaches__last": "rest", ".coaches__role": "role", ".coaches__quote": "bio", "img@image!figure": "photo" } },
+
+    { "sel": "#join", "remove": true, "ifEmpty": "volunteer.roles.0.name" },
+    { "sel": "#join-title .line:nth-child(1)", "literal": "Volunteer" },
+    { "sel": "#join-title .line:nth-child(2)", "literal": "with us" },
+    { "sel": ".join__intro", "remove": true },
+    { "sel": ".join__steps > li.join__step", "repeat": "volunteer.roles", "min": 1, "grow": true, "max": 8, "section": "#join",
+      "fields": { ".join__num": "$n", ".join__title": "name", ".join__text": "{department} · {commitment}" } },
+
+    { "sel": "#voices", "remove": true, "ifEmpty": "stories.0.quote|stories.0.excerpt" },
+    { "sel": "#voices-title .line:nth-child(1)", "literal": "In their" },
+    { "sel": "#voices-title .line:nth-child(2)", "literal": "words" },
+    { "sel": ".voices__track > li.voices__card", "repeat": "stories", "min": 1, "grow": true, "max": 8, "section": "#voices",
+      "fields": { ".voices__quote p": "“{quote|excerpt}”", ".voices__who": "name", ".voices__role": "location" } },
+
+    { "sel": "#fees", "remove": true },
+
+    { "sel": "#faq", "remove": true, "ifEmpty": "faqs.0.question" },
+    { "sel": "#faq-title .line:nth-child(1)", "literal": "Common" },
+    { "sel": "#faq-title .line:nth-child(2)", "literal": "questions" },
+    { "sel": ".faq__list > details.faq__item", "repeat": "faqs", "min": 1, "grow": true, "max": 8, "section": "#faq",
+      "fields": { "summary .m-text-7": "question", ".faq__a": "answer" } },
+
+    { "sel": ".contact__row--1 .contact__text", "literal": "Get in touch." },
+    { "sel": ".contact__row--2 .contact__text", "text": "tagline", "emptyRemove": ".contact__row--2" },
+    { "sel": ".contact__row--3", "remove": true },
+    { "sel": ".contact__info > div:nth-child(1) .contact__label", "literal": "Find us" },
+    { "sel": ".contact__info > div:nth-child(1) address", "text": "{address} · {cityLine}", "emptyRemove": ".contact__info > div" },
+    { "sel": ".contact__info > div:nth-child(2) p:nth-of-type(3) a", "attr": "href", "value": "mailto:{email}", "emptyRemove": "p" },
+    { "sel": ".contact__info > div:nth-child(2) p:nth-of-type(3) a", "text": "email", "emptyRemove": "p" },
+    { "sel": ".contact__info > div:nth-child(2) p:nth-of-type(2) a", "attr": "href", "value": "tel", "emptyRemove": "p" },
+    { "sel": ".contact__info > div:nth-child(2) p:nth-of-type(2) a", "text": "phone", "emptyRemove": "p" },
+    { "sel": ".contact__info > div:nth-child(3)", "remove": true },
+
+    { "sel": ".footer__cols > div:nth-child(1) .footer__head", "literal": "Explore" },
+    { "sel": ".footer__cols > div:nth-child(2) .footer__head", "literal": "Get involved" },
+    { "sel": ".footer__cols > div:nth-child(3) li", "repeat": "social", "min": 1, "grow": true, "section": ".footer__cols > div:nth-child(3)", "proto": ".footer__cols > div:nth-child(3) li:nth-child(1)",
+      "fields": { "a@href": "url", "a": "label" } },
+    { "sel": ".footer__mark", "text": "shortName|name" },
+    { "sel": ".footer__legal > p", "text": "© {year} {shortName|name} · Design:", "textNode": "first", "trailingSpace": true },
+    { "sel": ".footer__legal > p", "text": "\".\"", "textNode": true },
+    { "sel": ".footer__legal > ul", "remove": true }
+  ]
+}

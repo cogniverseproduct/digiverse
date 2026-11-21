@@ -15,7 +15,7 @@
     "db:rehearse-migration": "tsx scripts/verify-migration.local.ts"
   },
   "dependencies": {
-    "@vercel/blob": "^2.9.0",
+    "@vercel/blob": "^2.4.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

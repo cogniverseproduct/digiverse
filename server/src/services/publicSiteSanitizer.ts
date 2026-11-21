@@ -46,6 +46,11 @@ export function sanitizeWebsiteForPublic<T extends Partial<GeneratedWebsite> | u
     stripCulturalPrivateFields(copy);
   }
 
+  // Raw Google Drive folder/file links the Admin pasted (portfolio `media.*`, sports, etc.) are internal references to private
+  // Drive content. Public media is delivered through the proxy / embed items generated from them, never from these fields.
+  // Non-Drive values (for example a YouTube link stored in the same list) are kept.
+  stripDriveLinkFields(copy);
+
   // Never expose internal deployment bookkeeping inside the site payload.
   delete copy.requirements;
 
@@ -89,4 +94,25 @@ function stripNgoPrivateFields(node: any): void {
   delete node.panNumber;
   if ('driveFileId' in node && ('url' in node || 'imageUrl' in node || 'thumbnailUrl' in node)) delete node.driveFileId;
   Object.values(node).forEach(stripNgoPrivateFields);
+}
+
+const DRIVE_LINK_FIELDS = ['googleDriveGalleryUrl', 'googleDriveVideoUrl', 'googleDriveUrl'];
+const DRIVE_LINK_LIST_FIELDS = ['googleDriveVideoUrls'];
+const isDriveLink = (value: unknown): boolean =>
+  typeof value === 'string' && /(^|\/\/|\.)(drive|docs)\.google\.com\//i.test(value.trim());
+
+function stripDriveLinkFields(node: any): void {
+  if (!node || typeof node !== 'object') return;
+  if (Array.isArray(node)) {
+    node.forEach(stripDriveLinkFields);
+    return;
+  }
+  for (const field of DRIVE_LINK_FIELDS) {
+    if (field in node && isDriveLink(node[field])) delete node[field];
+  }
+  for (const field of DRIVE_LINK_LIST_FIELDS) {
+    if (Array.isArray(node[field])) node[field] = node[field].filter((v: unknown) => !isDriveLink(v));
+  }
+  delete node.googleDriveMediaFolders;
+  Object.values(node).forEach(stripDriveLinkFields);
 }

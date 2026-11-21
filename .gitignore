@@ -9,13 +9,15 @@ build/
 out/
 .next/
 
-# Environment variables
+# Environment variables (only *.env.example files are committed)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!**/.env.example
 *.env
+
+# Vercel CLI link/state (.vercel/project.json can pin the wrong project/directory)
+.vercel/
 
 # Debug logs
 npm-debug.log*
@@ -33,8 +35,19 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# DigiVerse Local Data & Persistence
-server/data/*.db*
+# DigiVerse Local Data & Persistence - NEVER commit databases, backups, journals, uploads or dumps.
+# (journals and migration reports can contain account identifiers or password hashes)
+server/data/*
+!server/data/uploads/
 server/data/uploads/*
 !server/data/uploads/.gitkeep
+server/pglite-data/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.sql
+*.dump
+*.journal.json
 

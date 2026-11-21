@@ -374,6 +374,15 @@ function openDatabase(): Promise<Database> {
 }
 
 /**
+ * Opens the database WITHOUT creating or upgrading the schema. For maintenance scripts whose
+ * dry-run / diagnose modes must not alter the database, and whose backups must capture the
+ * database before the application's schema upgrade runs. A later getDb() call still initializes it.
+ */
+export async function getDbUninitialized(): Promise<Database> {
+  return openDatabase();
+}
+
+/**
  * Returns the initialized database (schema created/migrated on first use).
  */
 export async function getDb(): Promise<Database> {

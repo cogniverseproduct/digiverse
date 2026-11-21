@@ -1,45 +1,55 @@
 /**
  * Local rehearsal of the SQLite -> Postgres migration (no cloud account).
- * Copies the given SQLite file into an in-memory Postgres (PGlite), then
- * reads every project back through the normal repository code.
  *
- * Usage: npx tsx scripts/verify-migration.local.ts --source <path-to-copy-of-digiverse.db>
+ * Runs the SAME engine and verification as the real migration into a disposable in-memory
+ * Postgres (PGlite), then reads every project back through the normal repository code.
+ * The original SQLite files are only read (their SHA-256 is verified unchanged).
+ *
+ * Usage: npx tsx scripts/verify-migration.local.ts [--source <path>] [--backup-dir <dir>]
+ * Tip: point --source at a COPY of digiverse.db + -wal + -shm if the server is running.
  */
 import path from 'node:path';
+import { DEFAULT_BACKUP_DIR, DEFAULT_SOURCE, runMigration } from './lib/sqliteToPostgres.js';
 
-process.env.DATABASE_DRIVER = 'pglite';
-process.env.MIGRATION_KEEP_CONNECTION = '1';
-delete process.env.DATABASE_URL;
+const argValue = (name: string) => {
+  const i = process.argv.indexOf(name);
+  return i > -1 ? path.resolve(process.argv[i + 1]) : undefined;
+};
 
-const sourceIndex = process.argv.indexOf('--source');
-const source = sourceIndex > -1 ? path.resolve(process.argv[sourceIndex + 1]) : path.resolve('data/digiverse.db');
+const report = await runMigration({
+  source: argValue('--source') ?? DEFAULT_SOURCE,
+  backupDir: argValue('--backup-dir') ?? DEFAULT_BACKUP_DIR,
+  dryRun: true,
+  keepConnection: true
+});
 
-const { migrateSqliteToPostgres } = await import('./migrate-sqlite-to-postgres.js');
-const reports = await migrateSqliteToPostgres({ source, dryRun: false });
-console.table(reports.map((r) => ({ table: r.table, sourceRows: r.sourceRows, inserted: r.inserted, targetRowsAfter: r.targetRowsAfter })));
+console.table(
+  report.tables.map((t) => ({ table: t.table, source: t.sourceRows, inserted: t.inserted, targetAfter: t.targetRowsAfter, mismatched: t.mismatchedRows }))
+);
 
-const { repository } = await import('../src/db/repository.js');
-const { closeDb } = await import('../src/db/database.js');
+const failed = report.checks.filter((c) => !c.ok);
+for (const c of failed) console.error(`FAILED: ${c.name}${c.detail ? ` - ${c.detail}` : ''}`);
 
-const projects = await repository.listProjects();
-const tenants = await repository.listTenants();
-const users = await repository.listUsers();
-let revisionsReadable = 0;
-for (const project of projects) {
-  const revisions = await repository.listRevisionsByProject(project.id);
-  revisionsReadable += revisions.length;
-  await repository.getCommercialRecord(project.id);
-  await repository.getDriveMediaByProject(project.id);
+let readback: Record<string, number> = {};
+if (report.ok) {
+  const { repository } = await import('../src/db/repository.js');
+  const projects = await repository.listProjects();
+  let revisionsReadable = 0;
+  for (const project of projects) {
+    revisionsReadable += (await repository.listRevisionsByProject(project.id)).length;
+    await repository.getCommercialRecord(project.id);
+    await repository.getDriveMediaByProject(project.id);
+  }
+  readback = {
+    projectsReadable: projects.length,
+    tenantsReadable: (await repository.listTenants()).length,
+    usersReadable: (await repository.listUsers()).length,
+    revisionsReadable
+  };
 }
 
-const mismatches = reports.filter((r) => r.targetRowsAfter !== r.sourceRows);
-console.log(JSON.stringify({
-  projectsReadable: projects.length,
-  tenantsReadable: tenants.length,
-  usersReadable: users.length,
-  revisionsReadable,
-  mismatchedTables: mismatches.map((r) => r.table)
-}, null, 2));
+console.log(JSON.stringify({ ok: report.ok, checks: `${report.checks.length - failed.length}/${report.checks.length}`, readback, report: report.reportPath }, null, 2));
 
+const { closeDb } = await import('../src/db/database.js');
 await closeDb();
-process.exit(mismatches.length ? 1 : 0);
+process.exit(report.ok ? 0 : 1);

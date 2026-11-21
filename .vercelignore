@@ -12,3 +12,13 @@ server/.env
 !**/.env.example
 scratch
 *.tsbuildinfo
+.vercel
+server/pglite-data
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.sql
+*.dump
+*.journal.json

@@ -41,7 +41,7 @@ if (dbOption) {
 }
 
 const { getPlatformEmails } = await import('../src/config.js');
-const { getDb, closeDb } = await import('../src/db/database.js');
+const { getDb, getDbUninitialized, closeDb } = await import('../src/db/database.js');
 const { getDefaultSqlitePath } = await import('../src/db/driver.js');
 const {
   planEmailMigration, applyEmailMigration, rollbackEmailMigration,
@@ -56,12 +56,32 @@ function mask(email: string): string {
 }
 
 async function main(): Promise<number> {
-  const db = await getDb();
+  // Open WITHOUT the application schema upgrade: dry runs must not alter the database, and the
+  // backup must capture the database as it was before any upgrade.
+  let db = await getDbUninitialized();
   const isSqlite = db.dialect === 'sqlite';
   const dataDir = isSqlite ? path.dirname(getDefaultSqlitePath()) : path.resolve('data');
   console.log(`Database: ${db.describe()}`);
 
   const rollbackFile = option('--rollback');
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+
+  if (flag('--apply') && !rollbackFile) {
+    if (isSqlite) {
+      // VACUUM INTO writes a consistent snapshot even while another process (the dev server) has the file open.
+      const source = getDefaultSqlitePath();
+      const backup = `${source}.pre-email-migration-${stamp}`;
+      await db.exec(`VACUUM INTO '${backup.replace(/'/g, "''")}'`);
+      console.log(`Backup written (taken BEFORE any schema upgrade): ${backup}`);
+    } else {
+      console.log('Postgres: make sure you have a database backup/branch before continuing.');
+    }
+  }
+
+  if (flag('--apply') || rollbackFile) {
+    db = await getDb(); // creates/upgrades the schema now that a backup exists
+  }
+
   if (rollbackFile) {
     const journal = JSON.parse(fs.readFileSync(path.resolve(rollbackFile), 'utf8'));
     const result = await rollbackEmailMigration(db, journal);
@@ -90,17 +110,6 @@ async function main(): Promise<number> {
   if (!flag('--apply')) {
     console.log('Dry run only. Nothing was changed. Re-run with --apply to migrate.');
     return 0;
-  }
-
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  if (isSqlite) {
-    // VACUUM INTO writes a consistent snapshot even while another process (the dev server) has the file open.
-    const source = getDefaultSqlitePath();
-    const backup = `${source}.pre-email-migration-${stamp}`;
-    await db.exec(`VACUUM INTO '${backup.replace(/'/g, "''")}'`);
-    console.log(`Backup written: ${backup}`);
-  } else {
-    console.log('Postgres: make sure you have a database backup/branch before continuing.');
   }
 
   const before = await snapshotAccounts(db);

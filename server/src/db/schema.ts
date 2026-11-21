@@ -13,6 +13,7 @@
  * re-running the column pass on every serverless cold start.
  */
 
+import { createHash } from 'node:crypto';
 import type { Database, Dialect } from './driver.js';
 import { setDatabaseInitializer } from './driver.js';
 import { applyAuthSchemaMigrations } from './authSchemaMigration.js';
@@ -417,7 +418,7 @@ export const TABLES: TableDefinition[] = [
   }
 ];
 
-const INDEXES = [
+export const INDEXES = [
   'CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username) WHERE username IS NOT NULL',
   'CREATE INDEX IF NOT EXISTS idx_admin_access_requests_status ON admin_access_requests(status, created_at DESC)',
   'CREATE INDEX IF NOT EXISTS idx_admin_password_resets_status ON admin_password_resets(status, created_at DESC)',
@@ -509,7 +510,7 @@ async function initializeSqlite(db: Database): Promise<void> {
   }
 
   // Legacy local databases: rebuild users if needed (nullable email, username).
-  await applyAuthSchemaMigrations(db);
+  await applyAuthSchemaMigrations(db, TABLES.find((t) => t.name === 'users')!.columns);
 
   // Add any columns introduced after a table was first created.
   for (const table of TABLES) {
@@ -540,31 +541,51 @@ async function initializeSqlite(db: Database): Promise<void> {
   await setSchemaVersion(db, SCHEMA_VERSION);
 }
 
+/**
+ * Fingerprint of everything that defines the schema (tables, columns, constraints,
+ * indexes). A test pins this value next to SCHEMA_VERSION so a schema change cannot
+ * ship without bumping SCHEMA_VERSION; without the bump, existing Postgres databases
+ * would never receive the new column/index (see the early return in initializePostgres).
+ */
+export function schemaFingerprint(): string {
+  return createHash('sha256')
+    .update(JSON.stringify({ tables: TABLES, indexes: INDEXES }))
+    .digest('hex');
+}
+
+/** Arbitrary constant; serialises concurrent schema initialisation across serverless instances. */
+const POSTGRES_SCHEMA_LOCK_KEY = 727354321;
+
 async function initializePostgres(db: Database): Promise<void> {
-  await db.exec(createTableSql(TABLES.find((t) => t.name === 'schema_meta')!, 'postgres'));
+  // One transaction under an advisory lock: concurrent cold starts queue up instead of racing
+  // on DDL, and a failure part-way leaves the schema untouched (Postgres DDL is transactional).
+  await db.transaction(async () => {
+    await db.get(`SELECT pg_advisory_xact_lock(${POSTGRES_SCHEMA_LOCK_KEY})`);
+    await db.exec(createTableSql(TABLES.find((t) => t.name === 'schema_meta')!, 'postgres'));
 
-  if ((await getSchemaVersion(db)) >= SCHEMA_VERSION) {
-    return;
-  }
-
-  for (const table of TABLES) {
-    await db.exec(createTableSql(table, 'postgres'));
-  }
-
-  for (const table of TABLES) {
-    for (const definition of table.columns) {
-      await db.exec(
-        `ALTER TABLE ${table.name} ADD COLUMN IF NOT EXISTS ${addableColumnDefinition(definition, 'postgres')}`
-      );
+    if ((await getSchemaVersion(db)) >= SCHEMA_VERSION) {
+      return;
     }
-  }
 
-  for (const statement of INDEXES) {
-    await db.exec(statement);
-  }
+    for (const table of TABLES) {
+      await db.exec(createTableSql(table, 'postgres'));
+    }
 
-  await backfillPlatformOwner(db);
-  await setSchemaVersion(db, SCHEMA_VERSION);
+    for (const table of TABLES) {
+      for (const definition of table.columns) {
+        await db.exec(
+          `ALTER TABLE ${table.name} ADD COLUMN IF NOT EXISTS ${addableColumnDefinition(definition, 'postgres')}`
+        );
+      }
+    }
+
+    for (const statement of INDEXES) {
+      await db.exec(statement);
+    }
+
+    await backfillPlatformOwner(db);
+    await setSchemaVersion(db, SCHEMA_VERSION);
+  });
 }
 
 export async function initializeSchema(db: Database): Promise<void> {

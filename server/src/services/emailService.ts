@@ -19,7 +19,7 @@
  */
 
 import nodemailer from 'nodemailer';
-import { getMailConfig, getPlatformEmails, type MailConfig } from '../config.js';
+import { getMailConfig, getPlatformEmails, isVercelDeployment, type MailConfig } from '../config.js';
 
 export interface EmailDispatchResult {
   dispatched: boolean;
@@ -59,9 +59,14 @@ async function dispatch(message: OutgoingMessage): Promise<EmailDispatchResult> 
   const base = { recipient: message.to, subject: message.subject };
 
   if (!config) {
-    // No SMTP: the body (which may hold single-use links) is logged for the operator only.
-    console.log(`[Email Service] Logging (No SMTP) message to ${message.to}:`);
-    console.log(`Subject: ${message.subject}\n${message.text}`);
+    if (isVercelDeployment()) {
+      // Deployment logs are retained and shared with the team: never write single-use setup/reset links there.
+      console.log(`[Email Service] SMTP is not configured; "${message.subject}" to ${message.to} was NOT sent (body not logged).`);
+    } else {
+      // Local development without SMTP: the body (which may hold single-use links) is logged for the operator only.
+      console.log(`[Email Service] Logging (No SMTP) message to ${message.to}:`);
+      console.log(`Subject: ${message.subject}\n${message.text}`);
+    }
     return { ...base, dispatched: false, status: 'SIMULATED_NO_SMTP' };
   }
 

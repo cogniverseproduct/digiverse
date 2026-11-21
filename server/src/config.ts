@@ -96,14 +96,72 @@ export function isVercelRuntime(): boolean {
   return process.env.VERCEL === '1' || Boolean(readEnv('VERCEL_ENV'));
 }
 
+/**
+ * True only on a real Vercel production/preview deployment (VERCEL_ENV is set by the
+ * platform). Local `VERCEL=1` simulations such as scripts/check-vercel-readiness.mjs
+ * are not treated as deployments.
+ */
+export function isVercelDeployment(): boolean {
+  const env = readEnv('VERCEL_ENV');
+  return env === 'production' || env === 'preview';
+}
+
 export function getDatabaseDriverName(): DatabaseDriverName {
   const explicit = readEnv('DATABASE_DRIVER')?.toLowerCase();
 
-  if (explicit === 'sqlite' || explicit === 'postgres' || explicit === 'pglite') {
-    return explicit;
+  if (explicit !== undefined && explicit !== 'sqlite' && explicit !== 'postgres' && explicit !== 'pglite') {
+    // A typo such as "postgresql" must never silently fall back to another database.
+    throw new Error(
+      `Unsupported DATABASE_DRIVER "${explicit}". Use "sqlite" (local), "postgres" (production) or "pglite" (tests).`
+    );
   }
 
-  return readEnv('DATABASE_URL') ? 'postgres' : 'sqlite';
+  const hasUrl = Boolean(readEnv('DATABASE_URL'));
+
+  if (explicit === 'sqlite' && hasUrl && (isVercelRuntime() || process.env.NODE_ENV === 'production')) {
+    // DATABASE_URL is a production signal; running SQLite beside it would silently ignore it.
+    throw new Error(
+      'DATABASE_DRIVER=sqlite conflicts with DATABASE_URL in a production/Vercel environment. ' +
+      'Remove DATABASE_DRIVER (or set it to "postgres").'
+    );
+  }
+
+  if (explicit === 'pglite' && isVercelDeployment()) {
+    throw new Error(
+      'PGlite is in-memory/ephemeral and is not allowed on Vercel deployments. Set DATABASE_URL to a managed Postgres.'
+    );
+  }
+
+  if (explicit) return explicit;
+
+  return hasUrl ? 'postgres' : 'sqlite';
+}
+
+/**
+ * Misconfiguration that would only surface later as confusing 500s. Reported once at boot (logged,
+ * never thrown, so /api/health stays reachable to diagnose it). Never includes secret values.
+ */
+export function getProductionConfigProblems(): string[] {
+  const problems: string[] = [];
+  const jwt = readEnv('JWT_SECRET');
+
+  if (!jwt) problems.push('JWT_SECRET is not set: sign-in will fail.');
+  else if (jwt.length < 32) problems.push('JWT_SECRET is shorter than 32 characters: sign-in will fail.');
+
+  if (isVercelRuntime() && !readEnv('DATABASE_URL')) {
+    problems.push('DATABASE_URL is not set: SQLite cannot be used on Vercel, so every database request will fail.');
+  }
+  if (isVercelRuntime() && !readEnv('BLOB_READ_WRITE_TOKEN')) {
+    problems.push('BLOB_READ_WRITE_TOKEN is not set: logo/hero/image uploads will be refused.');
+  }
+  if (readEnv('PUBLISH_MOCK_MODE')?.toLowerCase() === 'true' && process.env.NODE_ENV === 'production') {
+    problems.push('PUBLISH_MOCK_MODE=true: publishing is simulated (ignored on Vercel).');
+  }
+  if (readEnv('SETUP_KEY') && (readEnv('SETUP_KEY') as string).length < 24) {
+    problems.push('SETUP_KEY is shorter than 24 characters and is ignored.');
+  }
+
+  return problems;
 }
 
 export function getDatabaseUrl(): string | undefined {

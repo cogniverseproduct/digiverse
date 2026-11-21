@@ -10,5 +10,5 @@
 
 import './schema.js';
 
-export { getDb, closeDb } from './driver.js';
+export { getDb, getDbUninitialized, closeDb } from './driver.js';
 export type { Database, DbExecutor, SqlParam } from './driver.js';

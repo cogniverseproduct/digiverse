@@ -7,6 +7,10 @@
  *    (X-Forwarded-* headers, /api and /live rewrites), using an in-memory
  *    Postgres (PGlite) instead of a hosted database.
  *
+ * THIS IS A LOCAL SIMULATION. It cannot prove what only a real Vercel build proves: that the
+ * function bundler traces server/node_modules into api/index.js, that rewrites resolve in the
+ * documented order, and that the dashboard settings match. See "NOT VERIFIED" in the output.
+ *
  * Usage (repository root, after `npm run build`):
  *   node scripts/check-vercel-readiness.mjs
  */
@@ -32,6 +36,49 @@ const rewrites = vercelConfig.rewrites || [];
 check('vercel.json: API rewrite', rewrites.some((r) => r.source === '/api/(.*)' && r.destination === '/api'));
 check('vercel.json: SEO rewrite for /live/:slug', rewrites.some((r) => r.source === '/live/:slug' && r.destination === '/api'));
 check('vercel.json: SPA fallback is last', rewrites.at(-1)?.destination === '/index.html');
+check('vercel.json: unknown /assets/* returns a real 404 (routed before the SPA fallback)',
+  rewrites.findIndex((r) => r.source === '/assets/(.*)') > -1 &&
+  rewrites.findIndex((r) => r.source === '/assets/(.*)') < rewrites.findIndex((r) => r.destination === '/index.html'));
+check('vercel.json: one project, controlled from the repository root (framework null, no builds/projects/services keys)',
+  vercelConfig.framework === null && !('builds' in vercelConfig) && !('projects' in vercelConfig) && !('services' in vercelConfig) && !('experimentalServices' in vercelConfig));
+check('no vercel.json inside client/ or server/ (they would be ignored and confuse project detection)',
+  !fs.existsSync(path.join(root, 'client/vercel.json')) && !fs.existsSync(path.join(root, 'server/vercel.json')));
+{
+  // A linked .vercel/project.json with a rootDirectory would silently deploy only client/ or server/.
+  const link = path.join(root, '.vercel/project.json');
+  if (fs.existsSync(link)) {
+    let linked = {};
+    try { linked = JSON.parse(fs.readFileSync(link, 'utf8')); } catch { /* ignore */ }
+    check('.vercel/project.json does not pin a sub-directory', !linked.settings?.rootDirectory, JSON.stringify(linked.settings?.rootDirectory ?? null));
+  }
+}
+{
+  const readJson = (rel) => JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
+  const rootPkg = readJson('package.json');
+  const serverPkg = readJson('server/package.json');
+  check('root package.json pins Node 22.x (Vercel reads only the root engines)', /^22\./.test(rootPkg.engines?.node || ''), rootPkg.engines?.node);
+  check('server engines are satisfied by the pinned Node major', /22/.test(serverPkg.engines?.node || ''), serverPkg.engines?.node);
+  for (const dir of ['client', 'server']) {
+    const lockPath = path.join(root, dir, 'package-lock.json');
+    if (!fs.existsSync(lockPath)) { check(`${dir}/package-lock.json exists (npm ci needs it)`, false); continue; }
+    const pkg = readJson(`${dir}/package.json`);
+    const rootEntry = readJson(`${dir}/package-lock.json`).packages?.[''] ?? {};
+    const drift = ['dependencies', 'devDependencies'].flatMap((k) =>
+      Object.entries(pkg[k] ?? {}).filter(([name, spec]) => rootEntry[k]?.[name] !== spec).map(([name]) => name));
+    check(`${dir}/package-lock.json matches ${dir}/package.json (npm ci will not fail)`, drift.length === 0, drift.join(', '));
+  }
+  const include = vercelConfig.functions?.['api/index.js']?.includeFiles || '';
+  check('includeFiles targets exist after the build (client/dist/index.html, server/dist/site-bundle)',
+    /client\/dist\/index\.html/.test(include) && fs.existsSync(path.join(root, 'client/dist/index.html')) &&
+    /server\/dist\/site-bundle/.test(include) && fs.existsSync(path.join(root, 'server/dist/site-bundle/manifest.json')));
+  check('root package.json build script builds server, client and the site bundle',
+    ['build --prefix server', 'build --prefix client', 'build:site-bundle'].every((part) => (rootPkg.scripts?.build || '').includes(part)));
+}
+{
+  const gitignore = fs.readFileSync(path.join(root, '.gitignore'), 'utf8');
+  check('.gitignore keeps env files, databases, backups, journals and .vercel out of git',
+    /^\.env\.\*$/m.test(gitignore) && /^\.vercel\/$/m.test(gitignore) && /^server\/data\/\*$/m.test(gitignore) && /journal\.json/.test(gitignore));
+}
 check('vercel.json: function maxDuration within Hobby limit (<= 60s)', (vercelConfig.functions?.['api/index.js']?.maxDuration ?? 10) <= 60);
 check('api/index.js exists', fs.existsSync(path.join(root, 'api/index.js')));
 check('server/dist/app.js built', fs.existsSync(path.join(root, 'server/dist/app.js')));
@@ -81,7 +128,8 @@ check('client bundle contains no connection strings or tokens', bundle.length > 
 // 2. Runtime simulation of the Vercel function
 // ---------------------------------------------------------------------------
 process.env.VERCEL = '1';
-process.env.VERCEL_ENV = 'preview';
+// 'development' = Vercel runtime behaviour without being a production/preview deployment (PGlite is refused on those).
+process.env.VERCEL_ENV = 'development';
 process.env.DATABASE_DRIVER = 'pglite';
 process.env.JWT_SECRET = 'readiness-check-secret-longer-than-thirty-two-chars';
 process.env.SETUP_KEY = 'readiness-check-setup-key-0123456789';
@@ -173,6 +221,14 @@ try {
   const hook = await request('POST', '/api/vercel/webhook', { body: { type: 'deployment.ready' } });
   check('Vercel webhook is hidden (404) until VERCEL_WEBHOOK_SECRET is set', hook.status === 404, `HTTP ${hook.status}`);
 
+  check('/api/health does not expose database paths or hosts',
+    !/[\/]|\.db|@/.test(JSON.stringify(health.data?.database ?? {})), JSON.stringify(health.data?.database));
+
+  const missingAsset = await request('GET', '/assets/not-a-real-chunk-123abc.js');
+  check('Unknown /assets/* is a 404 with Cache-Control: no-store (not the SPA shell)',
+    missingAsset.status === 404 && /no-store/.test(missingAsset.headers.get('cache-control') || '') && !/<div id="root">/.test(missingAsset.text),
+    `HTTP ${missingAsset.status}`);
+
   const unknown = await request('GET', '/api/nope');
   check('Unknown API routes return JSON 404', unknown.status === 404 && Boolean(unknown.data?.error));
 } catch (error) {
@@ -185,5 +241,12 @@ try {
 
 console.table(results);
 const failed = results.filter((r) => r.result === 'FAIL');
-console.log(failed.length ? `${failed.length} check(s) failed.` : 'All Vercel readiness checks passed (no deployment was performed).');
+console.log(failed.length ? `${failed.length} check(s) failed.` : 'All local readiness checks passed. This was a LOCAL SIMULATION; no deployment was performed.');
+console.log([
+  'NOT VERIFIED by this script (only a real Vercel build/deploy can confirm):',
+  '  - the function bundler traces server/node_modules (express, pg, ...) into api/index.js',
+  '  - rewrite precedence (filesystem first, then /api, /live, /assets, SPA fallback) on the Vercel edge',
+  '  - the Vercel Dashboard matches docs/deployment/VERCEL.md (Root Directory ./, Framework Other, no overrides)',
+  '  - production DATABASE_URL / BLOB_READ_WRITE_TOKEN connectivity'
+].join('\n'));
 process.exit(failed.length ? 1 : 0);

@@ -117,16 +117,42 @@ reported as live unless Vercel reports READY.
 
 ## 4. Deploying DigiVerse itself
 
+DigiVerse itself is **ONE Vercel project** (one repo, one deployment lifecycle, one domain):
+`client/` is built to static files, `server/` is compiled, and `api/index.js` is the single
+Function that serves `/api/*` and `/live/:slug`. `client/` and `server/` each have their own
+`package.json`, which makes Vercel's import screen *suggest* separate projects or "Services":
+**decline that suggestion.** See [ARCHITECTURE_AUDIT.md](ARCHITECTURE_AUDIT.md) for why.
+
+(Separate from this: when you later enable real publishing, the Publishing feature creates one
+Vercel project **per client website** through the Vercel API. That is the publishing product
+and is off until `VERCEL_ENABLED=true` + `VERCEL_TOKEN`; it is not a second DigiVerse deployment.)
+
 1. Push the code to a repository you control (`server/.env` and `server/data/` are
    git-ignored).
-2. Vercel -> import the repository. Root directory = repository root, framework **Other**
-   (`vercel.json` supplies install/build commands).
+2. Vercel -> import the repository as **one** project with exactly these settings
+   (anything set in the dashboard must not contradict `vercel.json`, which wins for build,
+   install and output):
+
+   | Dashboard setting | Value |
+   |---|---|
+   | Root Directory | `./` (the repository root) - never `client` or `server` |
+   | Framework Preset | **Other** |
+   | Build / Install / Output Command | leave default (supplied by `vercel.json`) |
+   | Node.js Version | 22.x (also pinned by root `package.json` `engines`) |
+   | Include files outside Root Directory | not needed |
+   | Environment variable `NODE_ENV` | do **not** set it (it makes `npm ci` skip the devDependencies the build needs) |
+   | Deployment Protection | choose deliberately: it also protects `/live/*` and the SEO shell fetch on previews |
 3. Database: Vercel Marketplace -> **Neon** -> connect (adds `DATABASE_URL`, use the
    pooled string). Optional Blob store for uploads (adds `BLOB_READ_WRITE_TOKEN`).
 4. Environment variables: `JWT_SECRET` (32+ random chars), `SETUP_KEY` (once, remove after
    the first Super Admin exists), the publishing variables from section 2.
-5. Optional: copy local data with `npm run db:migrate:postgres` (see `server/scripts`).
-6. Deploy. Check `https://<app>/api/health`.
+5. Optional: copy local data - **only after** a rehearsal passes and you authorise it. Follow
+   [MIGRATION_RUNBOOK.md](MIGRATION_RUNBOOK.md) (`npm run db:rehearse-migration`, then
+   `db:migrate:postgres`). Legacy uploads referenced by existing projects need
+   `server/scripts/migrate-uploads-to-blob.ts`.
+6. Deploy. Check `https://<app>/api/health` (reports `database.status`, not the host).
+
+Every variable is documented in [ENVIRONMENT.md](ENVIRONMENT.md).
 
 | Variable | Needed | Notes |
 |---|---|---|

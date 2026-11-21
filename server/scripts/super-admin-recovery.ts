@@ -37,7 +37,7 @@ if (dbOption) {
 }
 
 const { getPlatformEmails } = await import('../src/config.js');
-const { getDb, closeDb } = await import('../src/db/database.js');
+const { getDb, getDbUninitialized, closeDb } = await import('../src/db/database.js');
 const { getDefaultSqlitePath } = await import('../src/db/driver.js');
 const {
   diagnoseSuperAdmins, planRecovery, applyRecovery, rollbackRecovery, validateRecoveryPassword
@@ -94,11 +94,26 @@ async function readNewPassword(): Promise<string> {
 }
 
 async function main(): Promise<number> {
-  const db = await getDb();
+  // Open WITHOUT the application schema upgrade: diagnose/dry-run must not alter the database, and the
+  // backup below must capture the database as it was before any upgrade.
+  let db = await getDbUninitialized();
   console.log(`Database: ${db.describe()}`);
   const official = getPlatformEmails().primary;
 
   const rollbackFile = option('--rollback');
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  if (rollbackFile || flag('--apply')) {
+    if (!rollbackFile && db.dialect === 'sqlite') {
+      const source = getDefaultSqlitePath();
+      const backup = `${source}.pre-super-admin-recovery-${stamp}`;
+      await db.exec(`VACUUM INTO '${backup.replace(/'/g, "''")}'`);
+      console.log(`Backup written (taken BEFORE any schema upgrade): ${backup}`);
+    } else if (!rollbackFile) {
+      console.log('Postgres: make sure you have a database backup/branch before continuing.');
+    }
+    db = await getDb(); // creates/upgrades the schema now that a backup exists
+  }
+
   if (rollbackFile) {
     const journal = JSON.parse(fs.readFileSync(path.resolve(rollbackFile), 'utf8'));
     const result = await rollbackRecovery(db, journal);
@@ -141,16 +156,7 @@ async function main(): Promise<number> {
     return 0;
   }
 
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
   const dataDir = db.dialect === 'sqlite' ? path.dirname(getDefaultSqlitePath()) : path.resolve('data');
-  if (db.dialect === 'sqlite') {
-    const source = getDefaultSqlitePath();
-    const backup = `${source}.pre-super-admin-recovery-${stamp}`;
-    await db.exec(`VACUUM INTO '${backup.replace(/'/g, "''")}'`);
-    console.log(`Backup written: ${backup}`);
-  } else {
-    console.log('Postgres: make sure you have a database backup/branch before continuing.');
-  }
 
   const journal = await applyRecovery(db, plan);
   fs.mkdirSync(dataDir, { recursive: true });

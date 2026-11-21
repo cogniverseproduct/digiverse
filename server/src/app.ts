@@ -25,7 +25,13 @@ import vercelWebhookRoutes from './routes/vercelWebhook.js';
 import { getDb } from './db/database.js';
 import { repository } from './db/repository.js';
 import { DemoInquiry } from './types/index.js';
-import { getCorsOrigins, getMediaStorageDriver, isVercelRuntime } from './config.js';
+import { getCorsOrigins, getMediaStorageDriver, getProductionConfigProblems, isVercelRuntime } from './config.js';
+
+if (isVercelRuntime() || process.env.NODE_ENV === 'production') {
+  for (const problem of getProductionConfigProblems()) {
+    console.error(`[config] ${problem}`);
+  }
+}
 
 const app = express();
 
@@ -58,10 +64,13 @@ app.get('/api/health', async (_req, res) => {
 
   try {
     const db = await getDb();
-    engine = db.describe();
+    // Public endpoint: report only the engine family, never the SQLite file path or the Postgres host.
+    engine = { sqlite: 'SQLite', postgres: 'PostgreSQL', pglite: 'PGlite' }[db.driverName] ?? 'unknown';
     await db.get('SELECT 1');
   } catch (err) {
-    dbStatus = `unhealthy: ${err instanceof Error ? err.message : String(err)}`;
+    // The detail (which can name hosts or paths) goes to the server log, not to anonymous callers.
+    console.error('[health] database check failed:', err instanceof Error ? err.message : err);
+    dbStatus = 'unhealthy';
   }
 
   const driveMode = (process.env.GOOGLE_DRIVE_API_KEY || process.env.GOOGLE_ACCESS_TOKEN)
@@ -143,6 +152,13 @@ app.use('/api/render', renderRoutes);
 app.get('/live/:slug', (req, res, next) => {
   req.url = `/live/${encodeURIComponent(String(req.params.slug))}`;
   renderRoutes(req, res, next);
+});
+
+// A hashed build asset that no longer exists (an old tab after a redeploy). vercel.json routes unknown
+// /assets/* requests here so they get a real 404 instead of the SPA shell with a long-lived cache header.
+app.use('/assets', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(404).type('text/plain').send('Asset not found');
 });
 
 app.use('/api', (_req, res) => {
